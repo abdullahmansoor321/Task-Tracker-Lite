@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Navbar from './components/Navbar.jsx';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import SettingsPage from './pages/SettingsPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import LandingPage from './pages/LandingPage.jsx';
@@ -41,8 +40,6 @@ const App = () => {
         <Route path="/signup" element={!authUser ? <SignupPage /> : <Navigate to="/" />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/settings" element={authUser ? <SettingsPage /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
-
       </Routes>
       <Toaster />
     </div>

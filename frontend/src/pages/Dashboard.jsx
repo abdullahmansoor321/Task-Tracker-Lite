@@ -12,7 +12,9 @@ import {
   Zap,
   Award,
   BarChart3,
-  Activity
+  Activity,
+  Users,
+  Star
 } from 'lucide-react';
 import TaskForm from '../components/TaskForm';
 import TaskList from '../components/TaskList';
@@ -38,6 +40,29 @@ const Dashboard = () => {
     if (hour < 12) return 'Good morning';
     if (hour < 18) return 'Good afternoon';
     return 'Good evening';
+  };
+
+  const formatMemberSince = (createdAt) => {
+    if (!createdAt) return 'Recently joined';
+    
+    try {
+      const date = new Date(createdAt);
+      const now = new Date();
+      const diffTime = Math.abs(now - date);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays < 30) {
+        return `Member for ${diffDays} days`;
+      } else if (diffDays < 365) {
+        const months = Math.floor(diffDays / 30);
+        return `Member for ${months} month${months > 1 ? 's' : ''}`;
+      } else {
+        const years = Math.floor(diffDays / 365);
+        return `Member for ${years} year${years > 1 ? 's' : ''}`;
+      }
+    } catch (error) {
+      return 'Recently joined';
+    }
   };
 
   // Calculate dashboard stats
@@ -70,17 +95,37 @@ const Dashboard = () => {
         
         {/* Welcome Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-base-content mb-2">
-            {greeting}, {authUser?.fullName?.split(' ')[0] || 'there'}! 👋
-          </h1>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-primary/20">
+              <img 
+                src={authUser?.profilePic || "/avatar.png"} 
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="text-left">
+              <h1 className="text-3xl sm:text-4xl font-bold text-base-content">
+                {greeting}, {authUser?.fullName?.split(' ')[0] || 'there'}! 👋
+              </h1>
+              <p className="text-sm text-base-content/60 flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                {formatMemberSince(authUser?.createdAt)}
+              </p>
+            </div>
+          </div>
           <p className="text-lg text-base-content/70">
             Ready to conquer your day? Let's see what's on your agenda.
           </p>
-          {authUser?.email && (
-            <p className="text-sm text-base-content/50 mt-1">
-              Welcome back, {authUser.email}
-            </p>
-          )}
+          <div className="flex items-center justify-center gap-4 mt-3">
+            <div className="badge badge-primary gap-2">
+              <Star className="w-3 h-3" />
+              Productivity Score: {completionRate}%
+            </div>
+            <div className="badge badge-secondary gap-2">
+              <Target className="w-3 h-3" />
+              {stats.total} Total Tasks
+            </div>
+          </div>
         </div>
 
         {/* Quick Stats */}
@@ -223,14 +268,16 @@ const Dashboard = () => {
               {recentTasks.length > 0 ? (
                 <div className="space-y-3">
                   {recentTasks.map((task) => (
-                    <div key={task._id} className="flex items-center gap-3 p-3 bg-base-200 rounded-lg">
-                      <div className={`w-3 h-3 rounded-full ${
+                    <div key={task._id} className="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
                         task.status === 'completed' ? 'bg-success' : 'bg-warning'
                       }`} />
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">{task.title}</p>
+                        <p className={`font-medium truncate ${
+                          task.status === 'completed' ? 'line-through text-base-content/60' : ''
+                        }`}>{task.title}</p>
                         <p className="text-xs text-base-content/60">
-                          {new Date(task.createdAt).toLocaleDateString()}
+                          Created {new Date(task.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <div className={`badge badge-sm ${
@@ -240,12 +287,28 @@ const Dashboard = () => {
                       </div>
                     </div>
                   ))}
+                  <div className="text-center pt-2">
+                    <button 
+                      onClick={() => setShowTaskForm(true)}
+                      className="btn btn-ghost btn-sm gap-2 text-primary"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add New Task
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="text-center py-8 text-base-content/60">
                   <Activity className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>No recent activity</p>
-                  <p className="text-sm">Create your first task to get started!</p>
+                  <p className="font-medium">No recent activity</p>
+                  <p className="text-sm mb-4">Create your first task to get started!</p>
+                  <button 
+                    onClick={() => setShowTaskForm(true)}
+                    className="btn btn-primary btn-sm gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Create First Task
+                  </button>
                 </div>
               )}
             </div>
@@ -261,26 +324,50 @@ const Dashboard = () => {
               
               {upcomingTasks.length > 0 ? (
                 <div className="space-y-3">
-                  {upcomingTasks.map((task) => (
-                    <div key={task._id} className="flex items-center gap-3 p-3 bg-base-200 rounded-lg">
-                      <Calendar className="w-4 h-4 text-secondary flex-shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate">{task.title}</p>
-                        <p className="text-xs text-base-content/60">
-                          Due: {new Date(task.dueDate).toLocaleDateString()}
-                        </p>
+                  {upcomingTasks.map((task) => {
+                    const daysUntilDue = Math.ceil((new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
+                    const isUrgent = daysUntilDue <= 1;
+                    
+                    return (
+                      <div key={task._id} className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                        isUrgent ? 'bg-error/10 border border-error/20' : 'bg-base-200 hover:bg-base-300'
+                      }`}>
+                        <Calendar className={`w-4 h-4 flex-shrink-0 ${
+                          isUrgent ? 'text-error' : 'text-secondary'
+                        }`} />
+                        <div className="flex-1 min-w-0">
+                          <p className={`font-medium truncate ${isUrgent ? 'text-error' : ''}`}>
+                            {task.title}
+                          </p>
+                          <p className="text-xs text-base-content/60">
+                            Due: {new Date(task.dueDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div className={`text-xs px-2 py-1 rounded ${
+                          isUrgent ? 'bg-error text-error-content' : 
+                          daysUntilDue <= 3 ? 'bg-warning text-warning-content' : 
+                          'bg-base-300 text-base-content'
+                        }`}>
+                          {daysUntilDue === 0 ? 'Today' :
+                           daysUntilDue === 1 ? 'Tomorrow' :
+                           `${daysUntilDue} days`}
+                        </div>
                       </div>
-                      <div className="text-xs text-base-content/60">
-                        {Math.ceil((new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24))} days
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-8 text-base-content/60">
                   <Calendar className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>No upcoming tasks</p>
-                  <p className="text-sm">You're all caught up! 🎉</p>
+                  <p className="font-medium">No upcoming tasks</p>
+                  <p className="text-sm mb-4">You're all caught up! 🎉</p>
+                  <button 
+                    onClick={() => setShowTaskForm(true)}
+                    className="btn btn-outline btn-sm gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Plan Ahead
+                  </button>
                 </div>
               )}
             </div>

@@ -38,15 +38,6 @@ const Navbar = () => {
           </li>
           <li>
             <Link 
-              to="/profile" 
-              className={`btn btn-ghost gap-2 ${isActivePath('/profile') ? 'btn-active' : ''}`}
-            >
-              <User className="w-4 h-4" />
-              Profile
-            </Link>
-          </li>
-          <li>
-            <Link 
               to="/settings" 
               className={`btn btn-ghost gap-2 ${isActivePath('/settings') ? 'btn-active' : ''}`}
             >
@@ -124,16 +115,6 @@ const Navbar = () => {
               >
                 <Home className="w-4 h-4" />
                 Dashboard
-              </Link>
-            </li>
-            
-            <li>
-              <Link 
-                to="/profile" 
-                className={`flex items-center gap-3 ${isActivePath('/profile') ? 'active' : ''}`}
-              >
-                <User className="w-4 h-4" />
-                Profile
               </Link>
             </li>
             
