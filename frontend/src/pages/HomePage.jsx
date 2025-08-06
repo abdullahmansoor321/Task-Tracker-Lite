@@ -34,6 +34,28 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  // Scroll to task management section
+  const scrollToTaskManagement = () => {
+    const taskManagementSection = document.getElementById('task-management');
+    if (taskManagementSection) {
+      taskManagementSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
+  // Handle filter changes with scroll
+  const handleFilterChange = (filterType, value) => {
+    if (filterType === 'status') {
+      setActiveFilter(value);
+    } else if (filterType === 'statusDropdown') {
+      setStatusFilter(value);
+    }
+    scrollToTaskManagement();
+  };
 
   useEffect(() => {
     getTasks();
@@ -80,7 +102,7 @@ const HomePage = () => {
   const getFilteredTasks = () => {
     let filtered = [...tasks];
 
-    // Apply status filter
+    // Apply status filter (from cards)
     if (activeFilter === 'completed') {
       filtered = filtered.filter(task => task.status === 'completed');
     } else if (activeFilter === 'pending') {
@@ -89,6 +111,17 @@ const HomePage = () => {
       filtered = filtered.filter(task => 
         task.status === 'pending' && new Date(task.dueDate) < new Date()
       );
+    }
+
+    // Apply status filter (from dropdown)
+    if (statusFilter !== 'all') {
+      if (statusFilter === 'overdue') {
+        filtered = filtered.filter(task => 
+          task.status === 'pending' && new Date(task.dueDate) < new Date()
+        );
+      } else {
+        filtered = filtered.filter(task => task.status === statusFilter);
+      }
     }
 
     // Apply search filter
@@ -192,7 +225,7 @@ const HomePage = () => {
           {/* Total Tasks Card */}
           <div 
             className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-primary/25 hover:-translate-y-1 ${activeFilter === 'all' ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''}`}
-            onClick={() => setActiveFilter('all')}
+            onClick={() => handleFilterChange('status', 'all')}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative p-6">
@@ -214,7 +247,7 @@ const HomePage = () => {
           {/* Completed Tasks Card */}
           <div 
             className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-success/10 via-success/5 to-transparent border border-success/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-success/25 hover:-translate-y-1 ${activeFilter === 'completed' ? 'ring-2 ring-success shadow-lg shadow-success/20' : ''}`}
-            onClick={() => setActiveFilter('completed')}
+            onClick={() => handleFilterChange('status', 'completed')}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative p-6">
@@ -236,7 +269,7 @@ const HomePage = () => {
           {/* Pending Tasks Card */}
           <div 
             className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-warning/10 via-warning/5 to-transparent border border-warning/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-warning/25 hover:-translate-y-1 ${activeFilter === 'pending' ? 'ring-2 ring-warning shadow-lg shadow-warning/20' : ''}`}
-            onClick={() => setActiveFilter('pending')}
+            onClick={() => handleFilterChange('status', 'pending')}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-warning/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative p-6">
@@ -258,7 +291,7 @@ const HomePage = () => {
           {/* Overdue Tasks Card */}
           <div 
             className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-error/10 via-error/5 to-transparent border border-error/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-error/25 hover:-translate-y-1 ${activeFilter === 'overdue' ? 'ring-2 ring-error shadow-lg shadow-error/20' : ''}`}
-            onClick={() => setActiveFilter('overdue')}
+            onClick={() => handleFilterChange('status', 'overdue')}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-error/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="relative p-6">
@@ -322,7 +355,7 @@ const HomePage = () => {
                 </button>
                 
                 <button 
-                  onClick={() => setActiveFilter('completed')}
+                  onClick={() => handleFilterChange('status', 'completed')}
                   className={`btn w-full gap-2 ${activeFilter === 'completed' ? 'btn-success' : 'btn-outline'}`}
                 >
                   <CheckCircle className="w-4 h-4" />
@@ -330,7 +363,7 @@ const HomePage = () => {
                 </button>
                 
                 <button 
-                  onClick={() => setActiveFilter('overdue')}
+                  onClick={() => handleFilterChange('status', 'overdue')}
                   className={`btn w-full gap-2 ${activeFilter === 'overdue' ? 'btn-error' : 'btn-outline'}`}
                 >
                   <AlertTriangle className="w-4 h-4" />
@@ -394,7 +427,7 @@ const HomePage = () => {
         </div>
 
         {/* Task Management Section */}
-        <div className="card bg-base-100 shadow-xl">
+        <div id="task-management" className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <div className="flex items-center justify-between mb-6">
               <h3 className="card-title">
@@ -411,7 +444,7 @@ const HomePage = () => {
             </div>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40 w-5 h-5" />
                 <input
@@ -424,14 +457,25 @@ const HomePage = () => {
               </div>
 
               <select
+                value={statusFilter}
+                onChange={(e) => handleFilterChange('statusDropdown', e.target.value)}
+                className="select select-bordered"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">⏰ Pending</option>
+                <option value="completed">✅ Completed</option>
+                <option value="overdue">🚨 Overdue</option>
+              </select>
+
+              <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
                 className="select select-bordered"
               >
                 <option value="all">All Priorities</option>
-                <option value="High">High Priority</option>
-                <option value="Medium">Medium Priority</option>
-                <option value="Low">Low Priority</option>
+                <option value="High">🔴 High Priority</option>
+                <option value="Medium">🟡 Medium Priority</option>
+                <option value="Low">🟢 Low Priority</option>
               </select>
 
               <select
@@ -454,6 +498,7 @@ const HomePage = () => {
                   setSearchTerm('');
                   setPriorityFilter('all');
                   setCategoryFilter('all');
+                  setStatusFilter('all');
                 }}
                 className="btn btn-outline"
               >
@@ -462,7 +507,7 @@ const HomePage = () => {
             </div>
 
             {/* Active Filter Indicator */}
-            {(activeFilter !== 'all' || searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all') && (
+            {(activeFilter !== 'all' || searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all' || statusFilter !== 'all') && (
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-sm font-medium">Active filters:</span>
                 {activeFilter !== 'all' && (
@@ -476,6 +521,9 @@ const HomePage = () => {
                 )}
                 {categoryFilter !== 'all' && (
                   <span className="badge badge-info">{categoryFilter}</span>
+                )}
+                {statusFilter !== 'all' && (
+                  <span className="badge badge-warning">Status: {statusFilter}</span>
                 )}
               </div>
             )}

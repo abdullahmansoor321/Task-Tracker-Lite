@@ -168,19 +168,27 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
         {/* Description Field */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium">Description</span>
+            <span className="label-text font-medium flex items-center gap-2">
+              📝 Description
+            </span>
+            <span className="label-text-alt text-base-content/50">Optional</span>
           </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Add task description (optional)..."
-            className="textarea textarea-bordered h-24 resize-none"
-            maxLength="500"
-          />
+          <div className="relative">
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Describe your task in detail... What needs to be done? Any specific requirements or notes?"
+              className="textarea textarea-bordered min-h-[120px] resize-y leading-relaxed text-base p-4 focus:textarea-primary"
+              maxLength="500"
+            />
+            <div className="absolute bottom-3 right-3 text-xs text-base-content/40 bg-base-100 px-2 py-1 rounded">
+              {formData.description.length}/500
+            </div>
+          </div>
           <label className="label">
             <span className="label-text-alt text-base-content/60">
-              {formData.description.length}/500 characters
+              💡 Tip: Add details, deadlines, or resources needed for this task
             </span>
           </label>
         </div>
