@@ -49,6 +49,16 @@ const Navbar = () => {
       </div>
       
       <div className="navbar-end gap-2">
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="btn btn-outline btn-error gap-2 hidden sm:flex"
+          title="Logout"
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="hidden md:inline">Logout</span>
+        </button>
+
         {/* Theme Toggle */}
         <button
           onClick={toggleTheme}

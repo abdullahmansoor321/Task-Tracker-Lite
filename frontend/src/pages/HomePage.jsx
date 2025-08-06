@@ -13,9 +13,7 @@ import {
   Award,
   BarChart3,
   Activity,
-  Users,
   Star,
-  LogOut,
   Filter,
   Search,
   Edit3,
@@ -26,7 +24,7 @@ import TaskForm from '../components/TaskForm';
 
 const HomePage = () => {
   const { tasks, getTasks, updateTask, deleteTask } = useTaskStore();
-  const { authUser, refreshUser, logout } = useAuthStore();
+  const { authUser, refreshUser } = useAuthStore();
   
   // States
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -51,19 +49,6 @@ const HomePage = () => {
     if (hour < 12) return 'Good morning';
     if (hour < 17) return 'Good afternoon';
     return 'Good evening';
-  };
-
-  const formatMemberSince = (date) => {
-    if (!date) return 'Welcome!';
-    const memberDate = new Date(date);
-    const now = new Date();
-    const diffTime = Math.abs(now - memberDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return 'Joined today';
-    if (diffDays < 30) return `Member for ${diffDays} days`;
-    if (diffDays < 365) return `Member for ${Math.floor(diffDays / 30)} months`;
-    return `Member for ${Math.floor(diffDays / 365)} years`;
   };
 
   // Calculate statistics
@@ -160,114 +145,141 @@ const HomePage = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await logout();
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 pt-20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 pt-16">
+      <div className="container mx-auto px-4 py-4">
         
-        {/* Header with Logout */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-primary/20">
+        {/* Welcome Header */}
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg">
               <img 
                 src={authUser?.profilePic || "/avatar.png"} 
                 alt="Profile"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-base-content">
-                {greeting}, {authUser?.fullName?.split(' ')[0] || 'there'}! 👋
-              </h1>
-              <p className="text-sm text-base-content/60 flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                {formatMemberSince(authUser?.createdAt)}
-              </p>
-            </div>
           </div>
-          <button 
-            onClick={handleLogout}
-            className="btn btn-outline btn-error gap-2 hover:btn-error"
-            title="Logout"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
-        </div>
-
-        {/* Productivity Overview */}
-        <div className="text-center mb-8">
-          <p className="text-lg text-base-content/70 mb-4">
-            Ready to conquer your day? Let's see what's on your agenda.
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <div className="badge badge-primary gap-2">
-              <Star className="w-3 h-3" />
-              Productivity Score: {completionRate}%
-            </div>
-            <div className="badge badge-secondary gap-2">
-              <Target className="w-3 h-3" />
-              {stats.total} Total Tasks
+          
+          <h1 className="text-3xl sm:text-4xl font-bold text-base-content mb-3">
+            {greeting}, {authUser?.fullName?.split(' ')[0] || 'there'}! 👋
+          </h1>
+          
+          <div className="max-w-2xl mx-auto">
+            <p className="text-base text-base-content/70 mb-4">
+              Ready to conquer your day? Let's see what's on your agenda and make it productive!
+            </p>
+            
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="badge badge-primary badge-lg gap-2 px-4 py-3">
+                <Star className="w-4 h-4" />
+                Productivity Score: {completionRate}%
+              </div>
+              <div className="badge badge-secondary badge-lg gap-2 px-4 py-3">
+                <Target className="w-4 h-4" />
+                {stats.total} Total Tasks
+              </div>
+              <div className="badge badge-accent badge-lg gap-2 px-4 py-3">
+                <Activity className="w-4 h-4" />
+                {stats.completed} Completed
+              </div>
             </div>
           </div>
         </div>
 
         {/* Quick Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {/* Total Tasks Card */}
           <div 
-            className={`stat bg-base-100 rounded-xl shadow-lg border border-primary/10 cursor-pointer hover:shadow-xl transition-all duration-200 hover:scale-105 ${activeFilter === 'all' ? 'ring-2 ring-primary' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-primary/25 hover:-translate-y-1 ${activeFilter === 'all' ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''}`}
             onClick={() => setActiveFilter('all')}
           >
-            <div className="stat-figure text-primary">
-              <Target className="w-8 h-8" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                  <Target className="w-6 h-6 text-primary" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-primary">{stats.total}</div>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-base-content/80 mb-1">Total Tasks</h3>
+                <p className="text-sm text-base-content/60">Your complete list</p>
+              </div>
             </div>
-            <div className="stat-title">Total Tasks</div>
-            <div className="stat-value text-primary">{stats.total}</div>
-            <div className="stat-desc">Your complete list</div>
           </div>
 
+          {/* Completed Tasks Card */}
           <div 
-            className={`stat bg-base-100 rounded-xl shadow-lg border border-success/10 cursor-pointer hover:shadow-xl transition-all duration-200 hover:scale-105 ${activeFilter === 'completed' ? 'ring-2 ring-success' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-success/10 via-success/5 to-transparent border border-success/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-success/25 hover:-translate-y-1 ${activeFilter === 'completed' ? 'ring-2 ring-success shadow-lg shadow-success/20' : ''}`}
             onClick={() => setActiveFilter('completed')}
           >
-            <div className="stat-figure text-success">
-              <CheckCircle className="w-8 h-8" />
+            <div className="absolute inset-0 bg-gradient-to-br from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-xl bg-success/10 group-hover:bg-success/20 transition-colors duration-300">
+                  <CheckCircle className="w-6 h-6 text-success" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-success">{stats.completed}</div>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-base-content/80 mb-1">Completed</h3>
+                <p className="text-sm text-base-content/60">Well done! 🎉</p>
+              </div>
             </div>
-            <div className="stat-title">Completed</div>
-            <div className="stat-value text-success">{stats.completed}</div>
-            <div className="stat-desc">Well done! 🎉</div>
           </div>
 
+          {/* Pending Tasks Card */}
           <div 
-            className={`stat bg-base-100 rounded-xl shadow-lg border border-warning/10 cursor-pointer hover:shadow-xl transition-all duration-200 hover:scale-105 ${activeFilter === 'pending' ? 'ring-2 ring-warning' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-warning/10 via-warning/5 to-transparent border border-warning/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-warning/25 hover:-translate-y-1 ${activeFilter === 'pending' ? 'ring-2 ring-warning shadow-lg shadow-warning/20' : ''}`}
             onClick={() => setActiveFilter('pending')}
           >
-            <div className="stat-figure text-warning">
-              <Clock className="w-8 h-8" />
+            <div className="absolute inset-0 bg-gradient-to-br from-warning/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-xl bg-warning/10 group-hover:bg-warning/20 transition-colors duration-300">
+                  <Clock className="w-6 h-6 text-warning" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-warning">{stats.pending}</div>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-base-content/80 mb-1">Pending</h3>
+                <p className="text-sm text-base-content/60">Keep going!</p>
+              </div>
             </div>
-            <div className="stat-title">Pending</div>
-            <div className="stat-value text-warning">{stats.pending}</div>
-            <div className="stat-desc">Keep going!</div>
           </div>
 
+          {/* Overdue Tasks Card */}
           <div 
-            className={`stat bg-base-100 rounded-xl shadow-lg border border-error/10 cursor-pointer hover:shadow-xl transition-all duration-200 hover:scale-105 ${activeFilter === 'overdue' ? 'ring-2 ring-error' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-error/10 via-error/5 to-transparent border border-error/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-error/25 hover:-translate-y-1 ${activeFilter === 'overdue' ? 'ring-2 ring-error shadow-lg shadow-error/20' : ''}`}
             onClick={() => setActiveFilter('overdue')}
           >
-            <div className="stat-figure text-error">
-              <AlertTriangle className="w-8 h-8" />
+            <div className="absolute inset-0 bg-gradient-to-br from-error/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 rounded-xl bg-error/10 group-hover:bg-error/20 transition-colors duration-300">
+                  <AlertTriangle className="w-6 h-6 text-error" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-error">{stats.overdue}</div>
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-base-content/80 mb-1">Overdue</h3>
+                <p className="text-sm text-base-content/60">Needs attention</p>
+              </div>
             </div>
-            <div className="stat-title">Overdue</div>
-            <div className="stat-value text-error">{stats.overdue}</div>
-            <div className="stat-desc">Needs attention</div>
           </div>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
           
           {/* Productivity Score */}
           <div className="card bg-base-100 shadow-xl">
