@@ -1,19 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { X, Plus, CalendarDays, Tag, AlertCircle, Save } from 'lucide-react';
-import toast from 'react-hot-toast';
 
 const TaskForm = ({ onClose, taskToEdit = null }) => {
   const { createTask, updateTask, isCreatingTask, isUpdatingTask } = useTaskStore();
   const [formData, setFormData] = useState({
-    title: taskToEdit?.title || '',
-    description: taskToEdit?.description || '',
-    priority: taskToEdit?.priority || 'Medium',
-    category: taskToEdit?.category || '',
-    dueDate: taskToEdit?.dueDate ? new Date(taskToEdit.dueDate).toISOString().split('T')[0] : ''
+    title: '',
+    description: '',
+    priority: 'Medium',
+    category: 'Work',
+    dueDate: ''
   });
 
   const [errors, setErrors] = useState({});
+
+  // Initialize form data when component mounts or taskToEdit changes
+  useEffect(() => {
+    if (taskToEdit) {
+      setFormData({
+        title: taskToEdit.title || '',
+        description: taskToEdit.description || '',
+        priority: taskToEdit.priority || 'Medium',
+        category: taskToEdit.category || 'Work',
+        dueDate: taskToEdit.dueDate ? new Date(taskToEdit.dueDate).toISOString().split('T')[0] : ''
+      });
+    } else {
+      // Set default due date to tomorrow for new tasks
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      setFormData(prev => ({
+        ...prev,
+        dueDate: tomorrow.toISOString().split('T')[0]
+      }));
+    }
+  }, [taskToEdit]);
 
   const priorities = [
     { value: 'Low', color: 'badge-success', icon: '🟢' },
@@ -41,14 +61,10 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
     
     if (!formData.dueDate) {
       newErrors.dueDate = 'Due date is required';
-    } else {
-      const selectedDate = new Date(formData.dueDate);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      
-      if (selectedDate < today) {
-        newErrors.dueDate = 'Due date cannot be in the past';
-      }
+    }
+    
+    if (!formData.category) {
+      newErrors.category = 'Please select a category';
     }
     
     setErrors(newErrors);
@@ -81,15 +97,13 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
     try {
       if (taskToEdit) {
         await updateTask(taskToEdit._id, formData);
-        toast.success('Task updated successfully! 🎉');
       } else {
         await createTask(formData);
-        toast.success('Task created successfully! 🚀');
       }
       
       onClose && onClose();
     } catch (error) {
-      toast.error(error.message || 'Something went wrong!');
+      console.error('Task operation failed:', error);
     }
   };
 

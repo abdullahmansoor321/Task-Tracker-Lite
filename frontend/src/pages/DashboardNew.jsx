@@ -24,8 +24,8 @@ import {
 } from 'lucide-react';
 import TaskForm from '../components/TaskForm';
 
-const HomePage = () => {
-  const { tasks, getTasks, updateTask, deleteTask } = useTaskStore();
+const Dashboard = () => {
+  const { tasks, getTasks } = useTaskStore();
   const { authUser, refreshUser, logout } = useAuthStore();
   
   // States
@@ -641,4 +641,4 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
   );
 };
 
-export default HomePage;
+export default Dashboard;

@@ -3,11 +3,14 @@ import { Search, Filter, SortAsc, SortDesc, Grid, List, CheckCircle, Clock, Aler
 import TaskCard from './TaskCard';
 import { useTaskStore } from '../store/useTaskStore';
 
-const TaskList = () => {
+const TaskList = ({ filterStatus: externalFilterStatus = 'all', onFilterChange }) => {
   const { tasks, getTasks, pagination, isTasksLoading } = useTaskStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  // Use external filter directly instead of local state
+  const filterStatus = externalFilterStatus;
+  const [filterPriority, setFilterPriority] = useState('all');
+  const [filterCategory, setFilterCategory] = useState('all');
   const [sortBy, setSortBy] = useState('dueDate');
   const [sortOrder, setSortOrder] = useState('asc');
   const [viewMode, setViewMode] = useState('grid');
@@ -15,21 +18,42 @@ const TaskList = () => {
   const sortOptions = [
     { value: 'dueDate', label: 'Due Date' },
     { value: 'createdAt', label: 'Created Date' },
-    { value: 'title', label: 'Title' }
+    { value: 'title', label: 'Title' },
+    { value: 'priority', label: 'Priority' }
   ];
+
+  const priorities = ['Low', 'Medium', 'High'];
+  const categories = ['Work', 'Personal', 'Health', 'Study', 'Finance', 'Other'];
 
   useEffect(() => {
     getTasks(currentPage);
   }, [currentPage, getTasks]);
+
+  // Handle filter status change
+  const handleFilterStatusChange = (newStatus) => {
+    if (onFilterChange) {
+      onFilterChange(newStatus);
+    }
+  };
 
   // Filter and sort tasks
   const filteredAndSortedTasks = React.useMemo(() => {
     let filtered = tasks.filter(task => {
       const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = filterStatus === 'all' || task.status === filterStatus;
       
-      return matchesSearch && matchesStatus;
+      let matchesStatus = true;
+      if (filterStatus === 'overdue') {
+        const isOverdue = task.status === 'pending' && new Date(task.dueDate) < new Date();
+        matchesStatus = isOverdue;
+      } else if (filterStatus !== 'all') {
+        matchesStatus = task.status === filterStatus;
+      }
+      
+      const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
+      const matchesCategory = filterCategory === 'all' || task.category === filterCategory;
+      
+      return matchesSearch && matchesStatus && matchesPriority && matchesCategory;
     });
 
     // Sort tasks
@@ -49,6 +73,11 @@ const TaskList = () => {
           aValue = a.title.toLowerCase();
           bValue = b.title.toLowerCase();
           break;
+        case 'priority':
+          const priorityOrder = { 'High': 3, 'Medium': 2, 'Low': 1 };
+          aValue = priorityOrder[a.priority] || 0;
+          bValue = priorityOrder[b.priority] || 0;
+          break;
         default:
           return 0;
       }
@@ -59,7 +88,7 @@ const TaskList = () => {
     });
 
     return filtered;
-  }, [tasks, searchTerm, filterStatus, sortBy, sortOrder]);
+  }, [tasks, searchTerm, filterStatus, filterPriority, filterCategory, sortBy, sortOrder]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -67,7 +96,9 @@ const TaskList = () => {
 
   const clearFilters = () => {
     setSearchTerm('');
-    setFilterStatus('all');
+    handleFilterStatusChange('all');
+    setFilterPriority('all');
+    setFilterCategory('all');
     setSortBy('dueDate');
     setSortOrder('asc');
   };
@@ -76,6 +107,8 @@ const TaskList = () => {
     let count = 0;
     if (searchTerm) count++;
     if (filterStatus !== 'all') count++;
+    if (filterPriority !== 'all') count++;
+    if (filterCategory !== 'all') count++;
     return count;
   };
 
@@ -92,6 +125,13 @@ const TaskList = () => {
 
   return (
     <div className="space-y-6">
+      {/* Debug Info */}
+      <div className="alert alert-info text-xs">
+        <span>TaskList Debug: filterStatus = "{filterStatus}", externalFilterStatus = "{externalFilterStatus}", Total tasks = {tasks.length}</span>
+        <br />
+        <span>Task statuses: {tasks.map(t => `"${t.title}": "${t.status}"`).join(', ')}</span>
+      </div>
+      
       {/* Search and Filters Header */}
       <div className="bg-base-100 rounded-xl shadow-lg p-4 sm:p-6">
         <div className="flex flex-col gap-4">
@@ -108,15 +148,38 @@ const TaskList = () => {
           </div>
 
           {/* Filters Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
+              onChange={(e) => handleFilterStatusChange(e.target.value)}
               className="select select-bordered select-sm"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
               <option value="completed">Completed</option>
+              <option value="overdue">Overdue</option>
+            </select>
+
+            <select
+              value={filterPriority}
+              onChange={(e) => setFilterPriority(e.target.value)}
+              className="select select-bordered select-sm"
+            >
+              <option value="all">All Priority</option>
+              {priorities.map(priority => (
+                <option key={priority} value={priority}>{priority}</option>
+              ))}
+            </select>
+
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="select select-bordered select-sm"
+            >
+              <option value="all">All Categories</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
             </select>
 
             <div className="flex gap-2">
@@ -167,6 +230,15 @@ const TaskList = () => {
               <span className="text-sm text-base-content/60">
                 {filteredAndSortedTasks.length} of {tasks.length} tasks
               </span>
+              {filterStatus !== 'all' && (
+                <span className={`badge badge-sm ${
+                  filterStatus === 'completed' ? 'badge-success' : 
+                  filterStatus === 'overdue' ? 'badge-error' : 
+                  filterStatus === 'pending' ? 'badge-warning' : 'badge-info'
+                }`}>
+                  Filter: {filterStatus}
+                </span>
+              )}
               {getActiveFiltersCount() > 0 && (
                 <div className="flex items-center gap-2">
                   <span className="badge badge-primary badge-sm">
@@ -178,6 +250,21 @@ const TaskList = () => {
                   >
                     Clear
                   </button>
+                </div>
+              )}
+              {filterStatus !== 'all' && (
+                <div className="badge badge-info badge-sm">
+                  Status: {filterStatus === 'overdue' ? 'Overdue' : filterStatus}
+                </div>
+              )}
+              {filterPriority !== 'all' && (
+                <div className="badge badge-warning badge-sm">
+                  Priority: {filterPriority}
+                </div>
+              )}
+              {filterCategory !== 'all' && (
+                <div className="badge badge-success badge-sm">
+                  Category: {filterCategory}
                 </div>
               )}
             </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Calendar, Edit3, Trash2, CheckCircle, Clock, AlertTriangle, User, Tag, FileText } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import TaskForm from './TaskForm';
-import toast from 'react-hot-toast';
 
 const TaskCard = ({ task }) => {
   const { updateTask, deleteTask, loading } = useTaskStore();
@@ -88,19 +87,17 @@ const TaskCard = ({ task }) => {
     const newStatus = task.status === 'completed' ? 'pending' : 'completed';
     try {
       await updateTask(task._id, { status: newStatus });
-      toast.success(newStatus === 'completed' ? 'Task completed! 🎉' : 'Task reopened!');
     } catch (error) {
-      toast.error('Failed to update task status');
+      console.error('Failed to update task status:', error);
     }
   };
 
   const handleDelete = async () => {
     try {
       await deleteTask(task._id);
-      toast.success('Task deleted successfully');
       setShowDeleteConfirm(false);
     } catch (error) {
-      toast.error('Failed to delete task');
+      console.error('Failed to delete task:', error);
     }
   };
 

@@ -3,7 +3,7 @@ import Task from "../models/task.model.js";
 // POST /tasks → Add task (only logged-in user)
 export const createTask = async (req, res) => {
     try {
-        const { title, description, dueDate } = req.body;
+        const { title, description, dueDate, priority, category } = req.body;
         const userId = req.user._id;
 
         // Validate required fields
@@ -13,8 +13,10 @@ export const createTask = async (req, res) => {
 
         const newTask = new Task({
             title,
-            description,
+            description: description || "",
             dueDate: new Date(dueDate),
+            priority: priority || "Medium",
+            category: category || "Other",
             userId,
             status: "pending"
         });
@@ -68,12 +70,12 @@ export const getTasks = async (req, res) => {
     }
 };
 
-// PATCH /tasks/:id → Update task status or description
+// PATCH /tasks/:id → Update task status or other fields
 export const updateTask = async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user._id;
-        const { status, description } = req.body;
+        const { status, title, description, dueDate, priority, category } = req.body;
 
         // Find task and check if it belongs to the user
         const task = await Task.findOne({ _id: id, userId });
@@ -82,24 +84,14 @@ export const updateTask = async (req, res) => {
             return res.status(404).json({ message: "Task not found" });
         }
 
-        // Tricky Rule: A task cannot be marked as completed if its dueDate is in the future
-        if (status === "completed") {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
-            const taskDueDate = new Date(task.dueDate);
-            taskDueDate.setHours(0, 0, 0, 0);
-
-            if (taskDueDate > today) {
-                return res.status(400).json({ 
-                    message: "Task cannot be marked as completed if its due date is in the future" 
-                });
-            }
-        }
-
         // Update only the fields that are provided
         const updateData = {};
         if (status !== undefined) updateData.status = status;
+        if (title !== undefined) updateData.title = title;
         if (description !== undefined) updateData.description = description;
+        if (dueDate !== undefined) updateData.dueDate = new Date(dueDate);
+        if (priority !== undefined) updateData.priority = priority;
+        if (category !== undefined) updateData.category = category;
 
         const updatedTask = await Task.findByIdAndUpdate(
             id,
