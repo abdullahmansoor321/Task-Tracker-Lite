@@ -22,7 +22,10 @@ export const useTaskStore = create((set, get) => ({
             });
         } catch (error) {
             console.error("Error fetching tasks:", error);
-            toast.error("Failed to load tasks");
+            // Only show error toast if it's not an authentication error
+            if (error.response?.status !== 401) {
+                toast.error("Failed to load tasks");
+            }
         } finally {
             set({ isTasksLoading: false });
         }
@@ -39,7 +42,10 @@ export const useTaskStore = create((set, get) => ({
             });
         } catch (error) {
             console.error("Error fetching overdue tasks:", error);
-            toast.error("Failed to load overdue tasks");
+            // Only show error toast if it's not an authentication error
+            if (error.response?.status !== 401) {
+                toast.error("Failed to load overdue tasks");
+            }
         } finally {
             set({ isTasksLoading: false });
         }

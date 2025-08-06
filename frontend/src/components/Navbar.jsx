@@ -5,12 +5,15 @@ import { LogOut, User, Settings, Moon, Sun, CheckSquare, Home } from 'lucide-rea
 import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
-  const { authUser, logout } = useAuthStore();
+  const { authUser, logout, isLoggingOut } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
   const location = useLocation();
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isLoggingOut) return; // Prevent multiple clicks
+    await logout();
   };
 
   const isActivePath = (path) => location.pathname === path;
@@ -52,11 +55,14 @@ const Navbar = () => {
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="btn btn-outline btn-error gap-2 hidden sm:flex"
+          disabled={isLoggingOut}
+          className={`btn btn-outline btn-error gap-2 hidden sm:flex ${isLoggingOut ? 'loading' : ''}`}
           title="Logout"
         >
-          <LogOut className="w-4 h-4" />
-          <span className="hidden md:inline">Logout</span>
+          {!isLoggingOut && <LogOut className="w-4 h-4" />}
+          <span className="hidden md:inline">
+            {isLoggingOut ? 'Logging out...' : 'Logout'}
+          </span>
         </button>
 
         {/* Theme Toggle */}
@@ -136,18 +142,6 @@ const Navbar = () => {
                 <Settings className="w-4 h-4" />
                 Settings
               </Link>
-            </li>
-            
-            <div className="divider my-1"></div>
-            
-            <li>
-              <button 
-                onClick={handleLogout}
-                className="flex items-center gap-3 text-error hover:bg-error/10"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </button>
             </li>
           </ul>
         </div>

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { axiosInstance } from '../lib/axios.js';
 import toast from 'react-hot-toast';
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   authUser: null,
 
   // Loading States
@@ -10,6 +10,7 @@ export const useAuthStore = create((set) => ({
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
+  isLoggingOut: false,
   onlineUsers: [],
 
   // Check if user is authenticated
@@ -73,21 +74,31 @@ export const useAuthStore = create((set) => ({
 
   // Logout Function (POST Method)
   logout: async () => {
+    const state = get();
+    if (state.isLoggingOut) return; // Prevent multiple calls
+    
+    set({ isLoggingOut: true });
+    
     try {
-      await axiosInstance.post('/auth/logout');
-      set({ authUser: null });
-      
-      // Clear tasks from task store if it exists
+      // Clear tasks first to prevent errors
       try {
         const { useTaskStore } = await import('./useTaskStore.js');
         useTaskStore.getState().clearTasks();
       } catch (error) {
-        // Task store might not be loaded yet, that's okay
+        // Task store might not be loaded yet
       }
       
+      await axiosInstance.post('/auth/logout');
+      set({ authUser: null, isLoggingOut: false });
+      
       toast.success("Logged out successfully!");
+      
+      // Navigate to login page immediately
+      window.location.href = '/login';
+      
     } catch (error) {
       console.error("Error during logout:", error);
+      set({ isLoggingOut: false });
       toast.error(
         error.response?.data?.message || error.message || "Logout failed"
       );
