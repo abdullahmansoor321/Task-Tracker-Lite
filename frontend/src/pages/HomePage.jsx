@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useAuthStore } from '../store/useAuthStore';
+import { useThemeStore } from '../store/useThemeStore';
 import { 
   Plus, 
   Calendar, 
@@ -25,6 +26,7 @@ import TaskForm from '../components/TaskForm';
 const HomePage = () => {
   const { tasks, getTasks, updateTask, deleteTask } = useTaskStore();
   const { authUser, refreshUser } = useAuthStore();
+  const { theme } = useThemeStore();
   
   // States
   const [showTaskForm, setShowTaskForm] = useState(false);
@@ -224,88 +226,152 @@ const HomePage = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {/* Total Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-primary/25 hover:-translate-y-1 ${activeFilter === 'all' ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl ${
+              theme === 'light' 
+                ? 'bg-blue-500 text-white border-0' 
+                : 'bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20'
+            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+              theme === 'light' 
+                ? 'hover:shadow-blue-500/25 hover:bg-blue-600' 
+                : 'hover:shadow-primary/25'
+            } hover:-translate-y-1 ${activeFilter === 'all' ? (theme === 'light' ? 'ring-2 ring-blue-300 shadow-lg shadow-blue-500/20' : 'ring-2 ring-primary shadow-lg shadow-primary/20') : ''}`}
             onClick={() => handleFilterChange('status', 'all')}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className={`absolute inset-0 ${
+              theme === 'light' 
+                ? 'bg-gradient-to-br from-white/5 to-transparent' 
+                : 'bg-gradient-to-br from-primary/5 to-transparent'
+            } opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
             <div className="relative p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                  <Target className="w-6 h-6 text-primary" />
+                <div className={`p-3 rounded-xl ${
+                  theme === 'light' 
+                    ? 'bg-white/20 group-hover:bg-white/30' 
+                    : 'bg-primary/10 group-hover:bg-primary/20'
+                } transition-colors duration-300`}>
+                  <Target className={`w-6 h-6 ${theme === 'light' ? 'text-white' : 'text-primary'}`} />
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-primary">{stats.total}</div>
+                  <div className={`text-3xl font-bold ${theme === 'light' ? 'text-white' : 'text-primary'}`}>{stats.total}</div>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-base-content/80 mb-1">Total Tasks</h3>
-                <p className="text-sm text-base-content/60">Your complete list</p>
+                <h3 className={`font-semibold mb-1 ${theme === 'light' ? 'text-white/90' : 'text-base-content/80'}`}>Total Tasks</h3>
+                <p className={`text-sm ${theme === 'light' ? 'text-white/70' : 'text-base-content/60'}`}>All time tasks</p>
               </div>
             </div>
           </div>
 
           {/* Completed Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-success/10 via-success/5 to-transparent border border-success/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-success/25 hover:-translate-y-1 ${activeFilter === 'completed' ? 'ring-2 ring-success shadow-lg shadow-success/20' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl ${
+              theme === 'light' 
+                ? 'bg-green-500 text-white border-0' 
+                : 'bg-gradient-to-br from-success/10 via-success/5 to-transparent border border-success/20'
+            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+              theme === 'light' 
+                ? 'hover:shadow-green-500/25 hover:bg-green-600' 
+                : 'hover:shadow-success/25'
+            } hover:-translate-y-1 ${activeFilter === 'completed' ? (theme === 'light' ? 'ring-2 ring-green-300 shadow-lg shadow-green-500/20' : 'ring-2 ring-success shadow-lg shadow-success/20') : ''}`}
             onClick={() => handleFilterChange('status', 'completed')}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className={`absolute inset-0 ${
+              theme === 'light' 
+                ? 'bg-gradient-to-br from-white/5 to-transparent' 
+                : 'bg-gradient-to-br from-success/5 to-transparent'
+            } opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
             <div className="relative p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-success/10 group-hover:bg-success/20 transition-colors duration-300">
-                  <CheckCircle className="w-6 h-6 text-success" />
+                <div className={`p-3 rounded-xl ${
+                  theme === 'light' 
+                    ? 'bg-white/20 group-hover:bg-white/30' 
+                    : 'bg-success/10 group-hover:bg-success/20'
+                } transition-colors duration-300`}>
+                  <CheckCircle className={`w-6 h-6 ${theme === 'light' ? 'text-white' : 'text-success'}`} />
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-success">{stats.completed}</div>
+                  <div className={`text-3xl font-bold ${theme === 'light' ? 'text-white' : 'text-success'}`}>{stats.completed}</div>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-base-content/80 mb-1">Completed</h3>
-                <p className="text-sm text-base-content/60">Well done! 🎉</p>
+                <h3 className={`font-semibold mb-1 ${theme === 'light' ? 'text-white/90' : 'text-base-content/80'}`}>Completed</h3>
+                <p className={`text-sm ${theme === 'light' ? 'text-white/70' : 'text-base-content/60'}`}>100% completion rate</p>
               </div>
             </div>
           </div>
 
           {/* Pending Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-warning/10 via-warning/5 to-transparent border border-warning/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-warning/25 hover:-translate-y-1 ${activeFilter === 'pending' ? 'ring-2 ring-warning shadow-lg shadow-warning/20' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl ${
+              theme === 'light' 
+                ? 'bg-orange-500 text-white border-0' 
+                : 'bg-gradient-to-br from-warning/10 via-warning/5 to-transparent border border-warning/20'
+            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+              theme === 'light' 
+                ? 'hover:shadow-orange-500/25 hover:bg-orange-600' 
+                : 'hover:shadow-warning/25'
+            } hover:-translate-y-1 ${activeFilter === 'pending' ? (theme === 'light' ? 'ring-2 ring-orange-300 shadow-lg shadow-orange-500/20' : 'ring-2 ring-warning shadow-lg shadow-warning/20') : ''}`}
             onClick={() => handleFilterChange('status', 'pending')}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-warning/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className={`absolute inset-0 ${
+              theme === 'light' 
+                ? 'bg-gradient-to-br from-white/5 to-transparent' 
+                : 'bg-gradient-to-br from-warning/5 to-transparent'
+            } opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
             <div className="relative p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-warning/10 group-hover:bg-warning/20 transition-colors duration-300">
-                  <Clock className="w-6 h-6 text-warning" />
+                <div className={`p-3 rounded-xl ${
+                  theme === 'light' 
+                    ? 'bg-white/20 group-hover:bg-white/30' 
+                    : 'bg-warning/10 group-hover:bg-warning/20'
+                } transition-colors duration-300`}>
+                  <Clock className={`w-6 h-6 ${theme === 'light' ? 'text-white' : 'text-warning'}`} />
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-warning">{stats.pending}</div>
+                  <div className={`text-3xl font-bold ${theme === 'light' ? 'text-white' : 'text-warning'}`}>{stats.pending}</div>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-base-content/80 mb-1">Pending</h3>
-                <p className="text-sm text-base-content/60">Keep going!</p>
+                <h3 className={`font-semibold mb-1 ${theme === 'light' ? 'text-white/90' : 'text-base-content/80'}`}>Pending</h3>
+                <p className={`text-sm ${theme === 'light' ? 'text-white/70' : 'text-base-content/60'}`}>Need attention</p>
               </div>
             </div>
           </div>
 
           {/* Overdue Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-error/10 via-error/5 to-transparent border border-error/20 cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-error/25 hover:-translate-y-1 ${activeFilter === 'overdue' ? 'ring-2 ring-error shadow-lg shadow-error/20' : ''}`}
+            className={`group relative overflow-hidden rounded-2xl ${
+              theme === 'light' 
+                ? 'bg-red-500 text-white border-0' 
+                : 'bg-gradient-to-br from-error/10 via-error/5 to-transparent border border-error/20'
+            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+              theme === 'light' 
+                ? 'hover:shadow-red-500/25 hover:bg-red-600' 
+                : 'hover:shadow-error/25'
+            } hover:-translate-y-1 ${activeFilter === 'overdue' ? (theme === 'light' ? 'ring-2 ring-red-300 shadow-lg shadow-red-500/20' : 'ring-2 ring-error shadow-lg shadow-error/20') : ''}`}
             onClick={() => handleFilterChange('status', 'overdue')}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-error/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className={`absolute inset-0 ${
+              theme === 'light' 
+                ? 'bg-gradient-to-br from-white/5 to-transparent' 
+                : 'bg-gradient-to-br from-error/5 to-transparent'
+            } opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
             <div className="relative p-6">
               <div className="flex items-center justify-between mb-4">
-                <div className="p-3 rounded-xl bg-error/10 group-hover:bg-error/20 transition-colors duration-300">
-                  <AlertTriangle className="w-6 h-6 text-error" />
+                <div className={`p-3 rounded-xl ${
+                  theme === 'light' 
+                    ? 'bg-white/20 group-hover:bg-white/30' 
+                    : 'bg-error/10 group-hover:bg-error/20'
+                } transition-colors duration-300`}>
+                  <AlertTriangle className={`w-6 h-6 ${theme === 'light' ? 'text-white' : 'text-error'}`} />
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-error">{stats.overdue}</div>
+                  <div className={`text-3xl font-bold ${theme === 'light' ? 'text-white' : 'text-error'}`}>{stats.overdue}</div>
                 </div>
               </div>
               <div>
-                <h3 className="font-semibold text-base-content/80 mb-1">Overdue</h3>
-                <p className="text-sm text-base-content/60">Needs attention</p>
+                <h3 className={`font-semibold mb-1 ${theme === 'light' ? 'text-white/90' : 'text-base-content/80'}`}>Overdue</h3>
+                <p className={`text-sm ${theme === 'light' ? 'text-white/70' : 'text-base-content/60'}`}>Past deadline</p>
               </div>
             </div>
           </div>

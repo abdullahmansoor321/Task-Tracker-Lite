@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Calendar, Edit3, Trash2, CheckCircle, Clock, AlertTriangle, User, Tag, FileText } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
+import { useThemeStore } from '../store/useThemeStore';
 import TaskForm from './TaskForm';
 
 const TaskCard = ({ task }) => {
   const { updateTask, deleteTask, loading } = useTaskStore();
+  const { theme } = useThemeStore();
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -103,12 +105,12 @@ const TaskCard = ({ task }) => {
 
   return (
     <>
-      <div className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 ${
-        task.status === 'completed' ? 'border-l-green-500 opacity-75' : 
-        isOverdue() ? 'border-l-red-500' : 
-        task.priority === 'High' ? 'border-l-red-400' :
-        task.priority === 'Medium' ? 'border-l-yellow-400' : 'border-l-blue-400'
-      } group hover:scale-[1.02]`}>
+      <div className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border border-base-300 ${
+        task.status === 'completed' ? 'border-l-green-500 opacity-75 hover:border-green-500' : 
+        isOverdue() ? 'border-l-red-500 hover:border-red-500' : 
+        task.priority === 'High' ? 'border-l-red-400 hover:border-red-500' :
+        task.priority === 'Medium' ? 'border-l-yellow-400 hover:border-yellow-500' : 'border-l-blue-400 hover:border-green-500'
+      } group hover:scale-[1.02] hover:border-opacity-80`}>
         <div className="card-body p-4 sm:p-6">
           {/* Header */}
           <div className="flex items-start justify-between gap-3 mb-3">
