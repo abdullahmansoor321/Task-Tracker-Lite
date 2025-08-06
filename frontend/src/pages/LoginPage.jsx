@@ -165,53 +165,76 @@ const LoginPage = () => {
         </div>
 
         {/* Right Side - Enhanced Visual */}
-        <div className="hidden lg:flex relative bg-gradient-to-br from-primary to-secondary overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
+        <div className="hidden lg:flex relative bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 overflow-hidden">
+          <div className="absolute inset-0 bg-black/10"></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-16 right-16 w-24 h-24 bg-white/10 rounded-full animate-float"></div>
+          <div className="absolute bottom-24 left-16 w-20 h-20 bg-white/10 rounded-full animate-float-delayed"></div>
+          <div className="absolute top-1/3 right-32 w-16 h-16 bg-white/10 rounded-full animate-pulse"></div>
+          
           <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white">
-            <div className="max-w-md text-center">
-              <h2 className="text-4xl font-bold mb-6">
+            <div className="max-w-lg text-center">
+              <h2 className="text-5xl font-bold mb-4 leading-tight">
                 Continue Where You Left Off
               </h2>
-              <p className="text-xl text-white/90 mb-8">
+              <p className="text-xl text-white/90 mb-12 leading-relaxed">
                 Your tasks are waiting. Jump back into your productivity flow and accomplish more today.
               </p>
               
-              <div className="space-y-4">
-                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm text-left">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                      <CheckSquare className="w-4 h-4" />
+              <div className="space-y-6">
+                {/* Personal Progress Card */}
+                <div className="bg-white/15 rounded-xl p-6 backdrop-blur-sm text-left border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-white/25 flex items-center justify-center">
+                      <CheckSquare className="w-6 h-6" />
                     </div>
-                    <div>
-                      <div className="font-semibold">Sarah's Tasks</div>
-                      <div className="text-sm text-white/80">12 active, 8 completed today</div>
+                    <div className="flex-1">
+                      <div className="font-bold text-lg">Your Tasks</div>
+                      <div className="text-white/80">12 active, 8 completed today</div>
                     </div>
                   </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full" style={{ width: '75%' }}></div>
+                  <div className="w-full bg-white/20 rounded-full h-3 mb-2">
+                    <div className="bg-gradient-to-r from-white to-white/80 h-3 rounded-full shadow-sm" style={{ width: '67%' }}></div>
                   </div>
+                  <div className="text-sm text-white/90">67% completion rate</div>
                 </div>
                 
-                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm text-left">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                      <Clock className="w-4 h-4" />
+                {/* Weekly Progress Card */}
+                <div className="bg-white/15 rounded-xl p-6 backdrop-blur-sm text-left border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-white/25 flex items-center justify-center">
+                      <Clock className="w-6 h-6" />
                     </div>
-                    <div>
-                      <div className="font-semibold">This Week's Progress</div>
-                      <div className="text-sm text-white/80">45 tasks completed</div>
+                    <div className="flex-1">
+                      <div className="font-bold text-lg">This Week's Progress</div>
+                      <div className="text-white/80">45 tasks completed</div>
                     </div>
                   </div>
-                  <div className="text-sm text-white/90">You're 23% more productive than last week! 🎉</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">📈</span>
+                    <span className="text-white/90 font-medium">You're 23% more productive than last week!</span>
+                  </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="grid grid-cols-3 gap-4 mt-8">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold">127</div>
+                    <div className="text-sm text-white/80">Total Tasks</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold">94%</div>
+                    <div className="text-sm text-white/80">On Time</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold">15</div>
+                    <div className="text-sm text-white/80">Streak Days</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          
-          {/* Animated Background Elements */}
-          <div className="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full animate-bounce delay-1000"></div>
-          <div className="absolute bottom-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-pulse"></div>
-          <div className="absolute top-1/2 right-20 w-12 h-12 bg-white/10 rounded-full animate-ping"></div>
         </div>
       </div>
     </div>
