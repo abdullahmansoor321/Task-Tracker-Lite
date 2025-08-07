@@ -93,6 +93,13 @@ export const useAuthStore = create((set, get) => ({
       
       toast.success("Logged out successfully!");
       
+      // Force navigation to login page after state update
+      setTimeout(() => {
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
+      }, 10);
+      
     } catch (error) {
       console.error("Error during logout:", error);
       set({ isLoggingOut: false });
