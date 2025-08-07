@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AuthImagePattern = ({ title, subtitle }) => {
+const AnimatedBackground = ({ title, subtitle }) => {
   return (
     <div className="flex items-center justify-center bg-gray-100 p-8 min-h-screen pt-20">
       <div className="max-w-sm text-center">
@@ -18,16 +18,15 @@ const AuthImagePattern = ({ title, subtitle }) => {
               style={{
                 animationDelay: `${i * 0.25}s`,
                 animationDuration: i % 2 === 0 ? '2.5s' : i % 3 === 0 ? '2s' : '3s',
-                opacity: i % 2 === 0 ? 1 : i % 3 === 0 ? 1 : 1
               }}
             />
           ))}
         </div>
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Join our community</h2>
-        <p className="text-gray-600">Connect with friends, share moments, and stay in touch with your loved ones.</p>
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">{title || "Join our community"}</h2>
+        <p className="text-gray-600">{subtitle || "Connect with friends, share moments, and stay in touch with your loved ones."}</p>
       </div>
     </div>
   );
 };
 
-export default AuthImagePattern;
+export default AnimatedBackground;

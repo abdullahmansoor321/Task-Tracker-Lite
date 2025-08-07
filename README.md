@@ -2,8 +2,6 @@
 
 A modern, full-stack task management application built with the MERN stack, featuring a beautiful UI and comprehensive productivity tools.
 
-![Task Tracker Banner](https://via.placeholder.com/800x200/4F46E5/FFFFFF?text=Task+Tracker+Lite)
-
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -79,7 +77,7 @@ A modern, full-stack task management application built with the MERN stack, feat
    
    Create `.env` file in the `backend` directory:
    ```env
-   MONGO_URI=your_mongodb_connection_string
+   MONGODB_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret_key
    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
    CLOUDINARY_API_KEY=your_cloudinary_api_key
@@ -113,23 +111,6 @@ A modern, full-stack task management application built with the MERN stack, feat
 5. **Manage Tasks**: Edit, complete, or delete tasks as needed
 6. **Profile**: Customize your profile and upload an avatar
 7. **Settings**: Configure preferences and switch themes
-
-## 🎨 Screenshots
-
-### Landing Page
-- Professional marketing homepage
-- Feature showcases and testimonials
-- Clean, modern design
-
-### Dashboard
-- Personalized greeting and statistics
-- Task overview and quick actions
-- Progress tracking and analytics
-
-### Task Management
-- Intuitive task creation and editing
-- Smart filtering and organization
-- Visual progress indicators
 
 ## 🏗️ Project Structure
 

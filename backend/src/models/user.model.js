@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { timestamps: true } // ✅ Correct placement
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);
