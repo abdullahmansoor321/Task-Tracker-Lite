@@ -104,11 +104,6 @@ const LandingPage = () => {
                   ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
                   : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
               }`}>Reviews</a></li>
-              <li><a href="#pricing" className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                theme === 'dark' 
-                  ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
-                  : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
-              }`}>Pricing</a></li>
             </ul>
           </div>
           
@@ -494,7 +489,7 @@ const LandingPage = () => {
               <h3 className="font-bold text-lg mb-4">Product</h3>
               <ul className="space-y-2">
                 <li><a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#testimonials" className="text-gray-400 hover:text-white transition-colors">Reviews</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">API</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Integrations</a></li>
               </ul>

@@ -96,21 +96,10 @@ const SignUpPage = () => {
                   </p>
                 </div>
 
-                {/* Progress Steps */}
                 <div className="flex items-center gap-2 mt-4">
                   <div className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full bg-purple-600"></div>
                     <span className="text-xs text-purple-600 font-medium">Create Account</span>
-                  </div>
-                  <div className="w-8 h-px bg-base-300"></div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-base-300"></div>
-                    <span className="text-xs text-base-content/40">Welcome Tour</span>
-                  </div>
-                  <div className="w-8 h-px bg-base-300"></div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-base-300"></div>
-                    <span className="text-xs text-base-content/40">Start Tracking</span>
                   </div>
                 </div>
               </div>
