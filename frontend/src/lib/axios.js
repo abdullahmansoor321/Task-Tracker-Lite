@@ -11,6 +11,7 @@ const getApiUrl = () => {
 };
 
 console.log("API URL:", getApiUrl()); // Debug log
+console.log("Environment:", import.meta.env.PROD ? "production" : "development"); // Additional debug
 
 export const axiosInstance = axios.create({
     baseURL: getApiUrl(),
