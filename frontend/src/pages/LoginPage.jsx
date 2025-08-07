@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { useThemeStore } from "../store/useThemeStore";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, CheckSquare, ArrowLeft, Shield, Zap, Clock } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, CheckSquare, ArrowLeft, Shield, Zap, Clock, Sun, Moon } from "lucide-react";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { theme, toggleTheme } = useThemeStore();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,18 +39,41 @@ const LoginPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
+    <div className={`min-h-screen transition-all duration-300 ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-purple-900' 
+        : 'bg-gradient-to-br from-slate-50 via-white to-blue-50'
+    }`}>
       <div className="grid lg:grid-cols-2 min-h-screen">
         {/* Left Side - Form */}
-        <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative">
+        <div className={`flex flex-col justify-center items-center p-6 sm:p-12 relative transition-all duration-300 ${
+          theme === 'dark' ? 'bg-gray-900/50' : 'bg-transparent'
+        }`}>
           {/* Back to landing */}
           <Link 
             to="/" 
-            className="absolute top-6 left-6 btn btn-ghost btn-sm gap-2"
+            className={`absolute top-6 left-6 btn btn-ghost btn-sm gap-2 transition-all duration-300 ${
+              theme === 'dark' 
+                ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
+                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+            }`}
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className={`absolute top-6 right-6 btn btn-ghost btn-square transition-all duration-200 ${
+              theme === 'dark' 
+                ? 'hover:bg-purple-900/50 hover:text-purple-400 text-gray-300' 
+                : 'hover:bg-purple-50 hover:text-purple-600 text-gray-700'
+            }`}
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
 
           <div className="w-full max-w-md space-y-8">
             {/* Logo */}
@@ -62,7 +87,9 @@ const LoginPage = () => {
                   <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                     Welcome Back
                   </h1>
-                  <p className="text-base-content/60 mt-2">
+                  <p className={`mt-2 transition-all duration-300 ${
+                    theme === 'dark' ? 'text-gray-400' : 'text-base-content/60'
+                  }`}>
                     Sign in to continue your productivity journey
                   </p>
                 </div>
@@ -70,15 +97,21 @@ const LoginPage = () => {
             </div>
 
             {/* Quick Features */}
-            <div className="bg-base-200/50 rounded-xl p-4 mb-6">
-              <h3 className="font-semibold text-sm mb-3 text-center">What's waiting for you:</h3>
+            <div className={`rounded-xl p-4 mb-6 transition-all duration-300 ${
+              theme === 'dark' ? 'bg-gray-800/50' : 'bg-base-200/50'
+            }`}>
+              <h3 className={`font-semibold text-sm mb-3 text-center transition-all duration-300 ${
+                theme === 'dark' ? 'text-gray-300' : 'text-base-content'
+              }`}>What's waiting for you:</h3>
               <div className="space-y-2">
                 {quickFeatures.map((feature, index) => (
                   <div key={index} className="flex items-center gap-3 text-sm">
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600/10 flex items-center justify-center text-purple-600">
                       {feature.icon}
                     </div>
-                    <span className="text-base-content/80">{feature.text}</span>
+                    <span className={`transition-all duration-300 ${
+                      theme === 'dark' ? 'text-gray-400' : 'text-base-content/80'
+                    }`}>{feature.text}</span>
                   </div>
                 ))}
               </div>
@@ -88,13 +121,21 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-medium">Email Address</span>
+                  <span className={`label-text font-medium transition-all duration-300 ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-base-content'
+                  }`}>Email Address</span>
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
+                  <Mail className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-all duration-300 ${
+                    theme === 'dark' ? 'text-gray-500' : 'text-base-content/40'
+                  }`} />
                   <input
                     type="email"
-                    className="input input-bordered w-full pl-10 focus:border-purple-600 focus:outline-none"
+                    className={`input input-bordered w-full pl-10 focus:border-purple-600 focus:outline-none transition-all duration-300 ${
+                      theme === 'dark' 
+                        ? 'bg-gray-800 border-gray-600 text-gray-200 placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Enter your email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -104,29 +145,39 @@ const LoginPage = () => {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-medium">Password</span>
+                  <span className={`label-text font-medium transition-all duration-300 ${
+                    theme === 'dark' ? 'text-gray-300' : 'text-base-content'
+                  }`}>Password</span>
                   <Link to="/forgot-password" className="label-text-alt link text-purple-600 hover:text-purple-700 text-xs">
                     Forgot password?
                   </Link>
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
+                  <Lock className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-all duration-300 ${
+                    theme === 'dark' ? 'text-gray-500' : 'text-base-content/40'
+                  }`} />
                   <input
                     type={showPassword ? "text" : "password"}
-                    className="input input-bordered w-full pl-10 pr-10 focus:border-purple-600 focus:outline-none"
+                    className={`input input-bordered w-full pl-10 pr-10 focus:border-purple-600 focus:outline-none transition-all duration-300 ${
+                      theme === 'dark' 
+                        ? 'bg-gray-800 border-gray-600 text-gray-200 placeholder-gray-500' 
+                        : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
+                    }`}
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 transition-all duration-300 ${
+                      theme === 'dark' ? 'text-gray-500 hover:text-gray-400' : 'text-base-content/40 hover:text-base-content/60'
+                    }`}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="w-5 h-5 text-base-content/40" />
+                      <EyeOff className="w-5 h-5" />
                     ) : (
-                      <Eye className="w-5 h-5 text-base-content/40" />
+                      <Eye className="w-5 h-5" />
                     )}
                   </button>
                 </div>
@@ -153,8 +204,12 @@ const LoginPage = () => {
 
             {/* Sign up link */}
             <div className="text-center">
-              <div className="divider text-base-content/40">OR</div>
-              <p className="text-base-content/60">
+              <div className={`divider transition-all duration-300 ${
+                theme === 'dark' ? 'text-gray-500' : 'text-base-content/40'
+              }`}>OR</div>
+              <p className={`transition-all duration-300 ${
+                theme === 'dark' ? 'text-gray-400' : 'text-base-content/60'
+              }`}>
                 Don't have an account?{" "}
                 <Link to="/signup" className="link text-purple-600 hover:text-purple-700 font-medium">
                   Create one now
