@@ -80,13 +80,13 @@ const LandingPage = () => {
           ? 'bg-gray-900/95 border-gray-700' 
           : 'bg-white/95 border-gray-100'
       }`}>
-        <div className="container mx-auto px-4 lg:px-8 relative">
+        <div className="container mx-auto px-2 sm:px-4 lg:px-8 relative">
           <div className="navbar-start">
-            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200">
-              <div className="p-2 bg-gradient-to-r from-purple-600 to-purple-800 rounded-xl shadow-lg">
-                <CheckSquare className="w-6 h-6 text-white" />
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity duration-200">
+              <div className="p-1.5 sm:p-2 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg sm:rounded-xl shadow-lg">
+                <CheckSquare className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent hidden sm:inline">
+              <span className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent hidden sm:inline">
                 TaskTracker
               </span>
             </Link>
@@ -107,23 +107,24 @@ const LandingPage = () => {
             </ul>
           </div>
           
-          <div className="navbar-end gap-2">
+          <div className="navbar-end gap-1 sm:gap-2">
             {/* Main navigation buttons */}
-            <Link to="/login" className={`btn btn-ghost font-medium hidden sm:flex transition-all duration-200 ${
+            <Link to="/login" className={`btn btn-ghost btn-sm sm:btn-md font-medium hidden sm:flex transition-all duration-200 ${
               theme === 'dark' 
                 ? 'text-gray-300 hover:text-purple-400' 
                 : 'text-gray-700 hover:text-purple-600'
             }`}>
               Sign In
             </Link>
-            <Link to="/signup" className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
-              Get Started
+            <Link to="/signup" className="btn btn-sm sm:btn-md bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+              <span className="hidden sm:inline">Get Started</span>
+              <span className="sm:hidden">Start</span>
             </Link>
             
             {/* Mobile menu button */}
             <div className="lg:hidden">
               <button 
-                className={`btn btn-ghost btn-square transition-all duration-200 ${
+                className={`btn btn-ghost btn-square btn-sm sm:btn-md transition-all duration-200 ${
                   theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                 }`}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -221,11 +222,11 @@ const LandingPage = () => {
           }`}></div>
         </div>
         
-        <div className="container mx-auto px-4 lg:px-8 text-center relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <div className="max-w-5xl mx-auto">
             
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 sm:mb-8">
               <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 bg-clip-text text-transparent leading-tight">
                 Get Things Done
               </span>
@@ -236,7 +237,7 @@ const LandingPage = () => {
             </h1>
             
             {/* Subtitle */}
-            <p className={`text-lg sm:text-xl lg:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed transition-colors duration-300 ${
+            <p className={`text-base sm:text-lg lg:text-xl xl:text-2xl mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed px-4 sm:px-0 transition-colors duration-300 ${
               theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
             }`}>
               The most intuitive task tracker that helps you stay organized, focused, and productive. 
@@ -244,26 +245,26 @@ const LandingPage = () => {
             </p>
 
             {/* Trust Badge - Moved down */}
-            <div className="flex justify-center mb-8">
-              <div className={`inline-flex items-center gap-2 px-6 py-3 backdrop-blur-sm rounded-full border shadow-lg transition-all duration-300 ${
+            <div className="flex justify-center mb-6 sm:mb-8">
+              <div className={`inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 backdrop-blur-sm rounded-full border shadow-lg transition-all duration-300 ${
                 theme === 'dark' 
                   ? 'bg-gray-800/80 border-gray-600' 
                   : 'bg-white/80 border-gray-200'
               }`}>
-                <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                <span className={`text-sm font-medium transition-colors duration-300 ${
+                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 fill-current" />
+                <span className={`text-xs sm:text-sm font-medium transition-colors duration-300 ${
                   theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                 }`}>Trusted by 50,000+ users worldwide</span>
               </div>
             </div>
             
             {/* CTA Buttons - Removed Demo */}
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
-              <Link to="/signup" className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 btn-lg px-8 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-8 sm:mb-12 px-4 sm:px-0">
+              <Link to="/signup" className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 btn-sm sm:btn-md lg:btn-lg px-6 sm:px-8 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 w-full sm:w-auto text-sm sm:text-base">
                 <span>Start Free Today</span>
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Link>
-              <Link to="/login" className={`btn btn-outline btn-lg px-8 transition-all duration-300 w-full sm:w-auto ${
+              <Link to="/login" className={`btn btn-outline btn-sm sm:btn-md lg:btn-lg px-6 sm:px-8 transition-all duration-300 w-full sm:w-auto text-sm sm:text-base ${
                 theme === 'dark' 
                   ? 'border-gray-600 text-gray-300 hover:bg-gray-800 hover:border-gray-500' 
                   : 'border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -273,13 +274,13 @@ const LandingPage = () => {
             </div>
             
             {/* Trust Indicators */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mb-16">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-3xl mx-auto mb-12 sm:mb-16 px-4 sm:px-0">
               {stats.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 transition-colors duration-300 ${
+                  <div className={`text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold mb-1 sm:mb-2 transition-colors duration-300 ${
                     theme === 'dark' ? 'text-gray-200' : 'text-gray-800'
                   }`}>{stat.number}</div>
-                  <div className={`text-sm transition-colors duration-300 ${
+                  <div className={`text-xs sm:text-sm transition-colors duration-300 ${
                     theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
                   }`}>{stat.label}</div>
                 </div>
@@ -287,11 +288,11 @@ const LandingPage = () => {
             </div>
             
             {/* Features Preview */}
-            <div className="text-center space-y-3">
-              <p className={`text-sm transition-colors duration-300 ${
+            <div className="text-center space-y-2 sm:space-y-3 px-4 sm:px-0">
+              <p className={`text-xs sm:text-sm transition-colors duration-300 ${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
               }`}>✓ No credit card required</p>
-              <p className={`text-sm transition-colors duration-300 ${
+              <p className={`text-xs sm:text-sm transition-colors duration-300 ${
                 theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
               }`}>✓ Free forever plan available</p>
               <p className={`text-sm transition-colors duration-300 ${

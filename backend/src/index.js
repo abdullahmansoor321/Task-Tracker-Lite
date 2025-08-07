@@ -14,15 +14,35 @@ const PORT = process.env.PORT || 5001;
 // Middleware must be before routes
 app.use(express.json());
 app.use(cookieParser()); 
+// CORS configuration with environment detection
+const getCorsOrigins = () => {
+    const origins = [];
+    
+    // Always allow localhost for development
+    if (process.env.NODE_ENV !== 'production') {
+        origins.push(
+            "http://localhost:5173", 
+            "http://localhost:5174", 
+            "http://localhost:5175", 
+            "http://localhost:5176"
+        );
+    }
+    
+    // In production, allow Vercel frontend
+    if (process.env.NODE_ENV === 'production') {
+        origins.push("https://task-tracker-lite-mu.vercel.app");
+    }
+    
+    // Always include environment variable if set
+    if (process.env.FRONTEND_URL) {
+        origins.push(process.env.FRONTEND_URL);
+    }
+    
+    return origins.filter(Boolean);
+};
+
 app.use(cors({
-    origin: [
-        "http://localhost:5173", 
-        "http://localhost:5174", 
-        "http://localhost:5175", 
-        "http://localhost:5176",
-        "https://task-tracker-lite-mu.vercel.app",
-        process.env.FRONTEND_URL
-    ].filter(Boolean),
+    origin: getCorsOrigins(),
     credentials: true
 }));
 // Routes
@@ -32,5 +52,6 @@ app.use("/api/tasks", taskRoutes);
 // Start server
 app.listen(PORT, () => {
     console.log('Server is running on port: ' + PORT);
+    console.log('Environment:', process.env.NODE_ENV);
     connectDB();
 });

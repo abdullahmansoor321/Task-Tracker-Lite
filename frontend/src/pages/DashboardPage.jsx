@@ -189,9 +189,9 @@ const DashboardPage = () => {
       <div className="container mx-auto px-4 py-4">
         
         {/* Welcome Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden border-4 border-primary/20 shadow-lg">
               <img 
                 src={authUser?.profilePic || "/avatar.png"} 
                 alt="Profile"
@@ -200,34 +200,34 @@ const DashboardPage = () => {
             </div>
           </div>
           
-          <h1 className="text-3xl sm:text-4xl font-bold text-base-content mb-3">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-base-content mb-3">
             {greeting}, {authUser?.fullName?.split(' ')[0] || 'there'}! 👋
           </h1>
           
           <div className="max-w-2xl mx-auto">
-            <p className="text-base text-base-content/70 mb-4">
+            <p className="text-sm sm:text-base text-base-content/70 mb-4 px-4">
               Ready to conquer your day? Let's see what's on your agenda and make it productive!
             </p>
             
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <div className="badge badge-primary badge-lg gap-2 px-4 py-3">
-                <Star className="w-4 h-4" />
-                Productivity Score: {completionRate}%
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+              <div className="badge badge-primary badge-sm sm:badge-lg gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm">Productivity Score: {completionRate}%</span>
               </div>
-              <div className="badge badge-secondary badge-lg gap-2 px-4 py-3">
-                <Target className="w-4 h-4" />
-                {stats.total} Total Tasks
+              <div className="badge badge-secondary badge-sm sm:badge-lg gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3">
+                <Target className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm">{stats.total} Total Tasks</span>
               </div>
-              <div className="badge badge-accent badge-lg gap-2 px-4 py-3">
-                <Activity className="w-4 h-4" />
-                {stats.completed} Completed
+              <div className="badge badge-accent badge-sm sm:badge-lg gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3">
+                <Activity className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm">{stats.completed} Completed</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Quick Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
           {/* Total Tasks Card */}
           <div 
             className={`group relative overflow-hidden rounded-2xl ${
@@ -514,22 +514,22 @@ const DashboardPage = () => {
             </div>
 
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40 w-5 h-5" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-4 mb-4 sm:mb-6">
+              <div className="relative sm:col-span-2 lg:col-span-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40 w-4 h-4 sm:w-5 sm:h-5" />
                 <input
                   type="text"
                   placeholder="Search tasks..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input input-bordered w-full pl-10"
+                  className="input input-bordered input-sm sm:input-md w-full pl-8 sm:pl-10 text-sm sm:text-base"
                 />
               </div>
 
               <select
                 value={statusFilter}
                 onChange={(e) => handleFilterChange('statusDropdown', e.target.value)}
-                className="select select-bordered"
+                className="select select-bordered select-sm sm:select-md text-sm sm:text-base"
               >
                 <option value="all">All Status</option>
                 <option value="pending">⏰ Pending</option>
@@ -540,7 +540,7 @@ const DashboardPage = () => {
               <select
                 value={priorityFilter}
                 onChange={(e) => setPriorityFilter(e.target.value)}
-                className="select select-bordered"
+                className="select select-bordered select-sm sm:select-md text-sm sm:text-base"
               >
                 <option value="all">All Priorities</option>
                 <option value="High">🔴 High Priority</option>
@@ -551,7 +551,7 @@ const DashboardPage = () => {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="select select-bordered"
+                className="select select-bordered select-sm sm:select-md text-sm sm:text-base"
               >
                 <option value="all">All Categories</option>
                 <option value="Work">Work</option>
@@ -570,37 +570,38 @@ const DashboardPage = () => {
                   setCategoryFilter('all');
                   setStatusFilter('all');
                 }}
-                className="btn btn-outline"
+                className="btn btn-outline btn-sm sm:btn-md text-sm sm:text-base sm:col-span-2 lg:col-span-1"
               >
-                Clear Filters
+                <span className="hidden sm:inline">Clear Filters</span>
+                <span className="sm:hidden">Clear</span>
               </button>
             </div>
 
             {/* Active Filter Indicator */}
             {(activeFilter !== 'all' || searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all' || statusFilter !== 'all') && (
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm font-medium">Active filters:</span>
+              <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-base-200 rounded-lg">
+                <span className="text-xs sm:text-sm font-medium">Active filters:</span>
                 {activeFilter !== 'all' && (
-                  <span className="badge badge-primary">{activeFilter}</span>
+                  <span className="badge badge-primary badge-sm sm:badge-md">{activeFilter}</span>
                 )}
                 {searchTerm && (
-                  <span className="badge badge-secondary">Search: {searchTerm}</span>
+                  <span className="badge badge-secondary badge-sm sm:badge-md">Search: {searchTerm}</span>
                 )}
                 {priorityFilter !== 'all' && (
-                  <span className="badge badge-accent">{priorityFilter} Priority</span>
+                  <span className="badge badge-accent badge-sm sm:badge-md">{priorityFilter} Priority</span>
                 )}
                 {categoryFilter !== 'all' && (
-                  <span className="badge badge-info">{categoryFilter}</span>
+                  <span className="badge badge-info badge-sm sm:badge-md">{categoryFilter}</span>
                 )}
                 {statusFilter !== 'all' && (
-                  <span className="badge badge-warning">Status: {statusFilter}</span>
+                  <span className="badge badge-warning badge-sm sm:badge-md">Status: {statusFilter}</span>
                 )}
               </div>
             )}
 
             {/* Tasks Grid */}
             {filteredTasks.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 {filteredTasks.map((task) => (
                   <TaskCard 
                     key={task._id} 
@@ -612,15 +613,15 @@ const DashboardPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16">
+              <div className="text-center py-8 sm:py-16 px-4">
                 <div className="max-w-sm mx-auto">
-                  <div className="mb-6">
-                    <CheckCircle className="w-16 h-16 mx-auto text-base-content/20" />
+                  <div className="mb-4 sm:mb-6">
+                    <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-base-content/20" />
                   </div>
-                  <h3 className="text-xl font-bold text-base-content/60 mb-2">
+                  <h3 className="text-lg sm:text-xl font-bold text-base-content/60 mb-2">
                     {tasks.length === 0 ? 'No tasks yet' : 'No tasks match your filters'}
                   </h3>
-                  <p className="text-base-content/50 mb-6">
+                  <p className="text-sm sm:text-base text-base-content/50 mb-4 sm:mb-6">
                     {tasks.length === 0 
                       ? 'Create your first task to get started with your productivity journey!'
                       : 'Try adjusting your filters or create a new task.'
@@ -628,10 +629,10 @@ const DashboardPage = () => {
                   </p>
                   <button 
                     onClick={() => setShowTaskForm(true)}
-                    className="btn btn-primary gap-2"
+                    className="btn btn-primary btn-sm sm:btn-md gap-2"
                   >
-                    <Plus className="w-4 h-4" />
-                    Create Task
+                    <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="text-sm sm:text-base">Create Task</span>
                   </button>
                 </div>
               </div>
@@ -643,7 +644,7 @@ const DashboardPage = () => {
       {/* Task Creation/Edit Modal */}
       {showTaskForm && (
         <div className="modal modal-open">
-          <div className="modal-box max-w-2xl">
+          <div className="modal-box w-11/12 max-w-2xl mx-4 sm:mx-auto">
             <TaskForm 
               taskToEdit={editingTask}
               onClose={handleTaskFormClose} 
@@ -682,16 +683,16 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
         daysUntilDue <= 1 ? 'border-l-orange-500' : 
         'border-l-blue-500'
       }`}>
-        <div className="card-body p-4">
+        <div className="card-body p-3 sm:p-4">
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
-              <h4 className={`font-bold text-sm truncate ${
+              <h4 className={`font-bold text-sm sm:text-base truncate ${
                 task.status === 'completed' ? 'line-through text-base-content/60' : ''
               }`}>
                 {task.title}
               </h4>
               {task.description && (
-                <p className="text-xs text-base-content/70 mt-1 line-clamp-2">
+                <p className="text-xs sm:text-sm text-base-content/70 mt-1 line-clamp-2">
                   {task.description}
                 </p>
               )}
@@ -699,29 +700,29 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
             <div className="flex items-center gap-1">
               <button
                 onClick={() => onEdit(task)}
-                className="btn btn-ghost btn-xs"
+                className="btn btn-ghost btn-xs sm:btn-sm"
                 title="Edit task"
               >
-                <Edit3 className="w-3 h-3" />
+                <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
-                className="btn btn-ghost btn-xs text-error"
+                className="btn btn-ghost btn-xs sm:btn-sm text-error"
                 title="Delete task"
               >
-                <Trash2 className="w-3 h-3" />
+                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs">{getCategoryIcon(task.category)}</span>
-              <span className={`badge badge-xs ${getPriorityColor(task.priority)}`}>
+          <div className="flex items-center justify-between mt-2 sm:mt-3">
+            <div className="flex items-center gap-1 sm:gap-2">
+              <span className="text-xs sm:text-sm">{getCategoryIcon(task.category)}</span>
+              <span className={`badge badge-xs sm:badge-sm ${getPriorityColor(task.priority)}`}>
                 {task.priority}
               </span>
             </div>
-            <div className="text-xs text-base-content/60">
+            <div className="text-xs sm:text-sm text-base-content/60">
               {isOverdue ? (
                 <span className="text-error font-medium">Overdue</span>
               ) : (
@@ -730,14 +731,19 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
             </div>
           </div>
 
-          <div className="card-actions justify-end mt-3">
+          <div className="card-actions justify-end mt-2 sm:mt-3">
             <button
               onClick={handleStatusToggle}
-              className={`btn btn-sm ${
+              className={`btn btn-xs sm:btn-sm ${
                 task.status === 'completed' ? 'btn-success' : 'btn-outline'
               }`}
             >
-              {task.status === 'completed' ? 'Completed' : 'Mark Complete'}
+              <span className="hidden sm:inline">
+                {task.status === 'completed' ? 'Completed' : 'Mark Complete'}
+              </span>
+              <span className="sm:hidden">
+                {task.status === 'completed' ? '✓ Done' : '✓ Complete'}
+              </span>
             </button>
           </div>
         </div>
@@ -746,19 +752,19 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="modal modal-open">
-          <div className="modal-box">
+          <div className="modal-box w-11/12 max-w-md mx-4 sm:mx-auto">
             <h3 className="font-bold text-lg">Delete Task</h3>
-            <p className="py-4">Are you sure you want to delete "{task.title}"? This action cannot be undone.</p>
-            <div className="modal-action">
+            <p className="py-4 text-sm sm:text-base">Are you sure you want to delete "{task.title}"? This action cannot be undone.</p>
+            <div className="modal-action flex-col sm:flex-row gap-2">
               <button 
                 onClick={() => setShowDeleteConfirm(false)}
-                className="btn btn-ghost"
+                className="btn btn-ghost btn-sm sm:btn-md w-full sm:w-auto"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleDelete}
-                className="btn btn-error"
+                className="btn btn-error btn-sm sm:btn-md w-full sm:w-auto"
               >
                 Delete
               </button>

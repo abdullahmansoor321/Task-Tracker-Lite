@@ -130,37 +130,37 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 pt-20">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 pt-16 sm:pt-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl">
         
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-base-content mb-2 flex items-center justify-center gap-3">
-            <Settings className="w-8 h-8 text-primary" />
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-base-content mb-2 flex items-center justify-center gap-2 sm:gap-3">
+            <Settings className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
             Account Settings
           </h1>
-          <p className="text-lg text-base-content/70">
+          <p className="text-base sm:text-lg text-base-content/70 px-4 sm:px-0">
             Manage your profile, preferences, and account security
           </p>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           
           {/* Profile Section - Takes 2 columns */}
           <div className="xl:col-span-2">
             <div className="card bg-base-100 shadow-xl border border-primary/10">
-              <div className="card-body">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-bold flex items-center gap-3">
-                    <User className="w-6 h-6 text-primary" />
+              <div className="card-body p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between mb-4 sm:mb-6 gap-3">
+                  <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2 sm:gap-3">
+                    <User className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                     Profile Information
                   </h2>
                   {!isEditingProfile && (
                     <button 
                       onClick={() => setIsEditingProfile(true)}
-                      className="btn btn-primary btn-sm gap-2"
+                      className="btn btn-primary btn-sm gap-2 w-full sm:w-auto"
                     >
-                      <Edit3 className="w-4 h-4" />
+                      <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
                       Edit Profile
                     </button>
                   )}
@@ -168,19 +168,19 @@ const SettingsPage = () => {
 
                 {isEditingProfile ? (
                   /* Edit Mode */
-                  <form onSubmit={handleProfileSubmit} className="space-y-6">
+                  <form onSubmit={handleProfileSubmit} className="space-y-4 sm:space-y-6">
                     {/* Profile Picture Upload */}
-                    <div className="flex flex-col sm:flex-row items-center gap-6">
+                    <div className="flex flex-col items-center gap-4 sm:gap-6">
                       <div className="relative">
-                        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-primary/20">
                           <img 
                             src={imagePreview || authUser?.profilePic || "/avatar.png"} 
                             alt="Profile"
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <label className="absolute -bottom-2 -right-2 btn btn-circle btn-sm btn-primary cursor-pointer">
-                          <Camera className="w-4 h-4" />
+                        <label className="absolute -bottom-2 -right-2 btn btn-circle btn-xs sm:btn-sm btn-primary cursor-pointer">
+                          <Camera className="w-3 h-3 sm:w-4 sm:h-4" />
                           <input 
                             type="file" 
                             accept="image/*" 
@@ -190,9 +190,9 @@ const SettingsPage = () => {
                         </label>
                       </div>
                       
-                      <div className="flex-1 w-full">
-                        <h3 className="font-semibold text-lg mb-2">Change Profile Picture</h3>
-                        <p className="text-sm text-base-content/60 mb-3">
+                      <div className="flex-1 w-full text-center">
+                        <h3 className="font-semibold text-base sm:text-lg mb-2">Change Profile Picture</h3>
+                        <p className="text-xs sm:text-sm text-base-content/60 mb-3">
                           Upload a new profile picture. Max size: 5MB
                         </p>
                         {selectedImage && (

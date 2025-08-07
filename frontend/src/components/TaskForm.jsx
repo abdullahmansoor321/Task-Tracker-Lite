@@ -114,32 +114,32 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-base-content">
+      <div className="flex items-start justify-between mb-4 sm:mb-6">
+        <div className="flex-1">
+          <h2 className="text-xl sm:text-2xl font-bold text-base-content">
             {taskToEdit ? 'Edit Task' : 'Create New Task'}
           </h2>
-          <p className="text-base-content/60 mt-1">
+          <p className="text-sm sm:text-base text-base-content/60 mt-1">
             {taskToEdit ? 'Update your task details' : 'Add a new task to your list'}
           </p>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="btn btn-ghost btn-sm btn-circle"
+            className="btn btn-ghost btn-sm btn-circle flex-shrink-0 ml-2"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Title Field */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium">Task Title *</span>
+            <span className="label-text text-sm sm:text-base font-medium">Task Title *</span>
           </label>
           <input
             type="text"
@@ -147,19 +147,19 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
             value={formData.title}
             onChange={handleInputChange}
             placeholder="Enter task title..."
-            className={`input input-bordered w-full ${errors.title ? 'input-error' : ''}`}
+            className={`input input-bordered input-sm sm:input-md w-full ${errors.title ? 'input-error' : ''}`}
             maxLength="100"
           />
           {errors.title && (
             <label className="label">
-              <span className="label-text-alt text-error flex items-center gap-1">
+              <span className="label-text-alt text-error flex items-center gap-1 text-xs">
                 <AlertCircle className="w-3 h-3" />
                 {errors.title}
               </span>
             </label>
           )}
           <label className="label">
-            <span className="label-text-alt text-base-content/60">
+            <span className="label-text-alt text-base-content/60 text-xs">
               {formData.title.length}/100 characters
             </span>
           </label>
@@ -168,10 +168,10 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
         {/* Description Field */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium flex items-center gap-2">
+            <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
               📝 Description
             </span>
-            <span className="label-text-alt text-base-content/50">Optional</span>
+            <span className="label-text-alt text-base-content/50 text-xs">Optional</span>
           </label>
           <div className="relative">
             <textarea
@@ -179,27 +179,27 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
               value={formData.description}
               onChange={handleInputChange}
               placeholder="Describe your task in detail... What needs to be done? Any specific requirements or notes?"
-              className="textarea textarea-bordered min-h-[120px] resize-y leading-relaxed text-base p-4 focus:textarea-primary"
+              className="textarea textarea-bordered textarea-sm sm:textarea-md min-h-[100px] sm:min-h-[120px] resize-y leading-relaxed text-sm sm:text-base p-3 sm:p-4 focus:textarea-primary"
               maxLength="500"
             />
-            <div className="absolute bottom-3 right-3 text-xs text-base-content/40 bg-base-100 px-2 py-1 rounded">
+            <div className="absolute bottom-2 right-2 text-xs text-base-content/40 bg-base-100 px-2 py-1 rounded">
               {formData.description.length}/500
             </div>
           </div>
           <label className="label">
-            <span className="label-text-alt text-base-content/60">
+            <span className="label-text-alt text-base-content/60 text-xs">
               💡 Tip: Add details, deadlines, or resources needed for this task
             </span>
           </label>
         </div>
 
         {/* Priority and Category Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {/* Priority Field */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium flex items-center gap-2">
-                <AlertCircle className="w-4 h-4" />
+              <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+                <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4" />
                 Priority
               </span>
             </label>
@@ -207,7 +207,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
               name="priority"
               value={formData.priority}
               onChange={handleInputChange}
-              className="select select-bordered w-full"
+              className="select select-bordered select-sm sm:select-md w-full"
             >
               {priorities.map((priority) => (
                 <option key={priority.value} value={priority.value}>
@@ -220,8 +220,8 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
           {/* Category Field */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium flex items-center gap-2">
-                <Tag className="w-4 h-4" />
+              <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+                <Tag className="w-3 h-3 sm:w-4 sm:h-4" />
                 Category
               </span>
             </label>
@@ -229,7 +229,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className="select select-bordered w-full"
+              className="select select-bordered select-sm sm:select-md w-full"
             >
               <option value="">Select category...</option>
               {categories.map((category) => (
@@ -244,8 +244,8 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
         {/* Due Date Field */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium flex items-center gap-2">
-              <CalendarDays className="w-4 h-4" />
+            <span className="label-text text-sm sm:text-base font-medium flex items-center gap-2">
+              <CalendarDays className="w-3 h-3 sm:w-4 sm:h-4" />
               Due Date *
             </span>
           </label>
@@ -255,18 +255,18 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
             value={formData.dueDate}
             onChange={handleInputChange}
             min={new Date().toISOString().split('T')[0]}
-            className={`input input-bordered w-full ${errors.dueDate ? 'input-error' : ''}`}
+            className={`input input-bordered input-sm sm:input-md w-full ${errors.dueDate ? 'input-error' : ''}`}
           />
           {errors.dueDate && (
             <label className="label">
-              <span className="label-text-alt text-error flex items-center gap-1">
+              <span className="label-text-alt text-error flex items-center gap-1 text-xs">
                 <AlertCircle className="w-3 h-3" />
                 {errors.dueDate}
               </span>
             </label>
           )}
           <label className="label">
-            <span className="label-text-alt text-base-content/60">
+            <span className="label-text-alt text-base-content/60 text-xs">
               Quick set: 
               <button
                 type="button"
@@ -288,18 +288,20 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-4">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-3 sm:pt-4">
           <button
             type="submit"
             disabled={isCreatingTask || isUpdatingTask}
-            className="btn btn-primary flex-1 gap-2"
+            className="btn btn-primary btn-sm sm:btn-md flex-1 gap-2"
           >
             {(isCreatingTask || isUpdatingTask) ? (
               <span className="loading loading-spinner loading-sm"></span>
             ) : (
               <>
-                <Save className="w-4 h-4" />
-                {taskToEdit ? 'Update Task' : 'Create Task'}
+                <Save className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="text-sm sm:text-base">
+                  {taskToEdit ? 'Update Task' : 'Create Task'}
+                </span>
               </>
             )}
           </button>
@@ -308,10 +310,10 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
             <button
               type="button"
               onClick={onClose}
-              className="btn btn-outline flex-1"
+              className="btn btn-outline btn-sm sm:btn-md flex-1"
               disabled={isCreatingTask || isUpdatingTask}
             >
-              Cancel
+              <span className="text-sm sm:text-base">Cancel</span>
             </button>
           )}
         </div>
