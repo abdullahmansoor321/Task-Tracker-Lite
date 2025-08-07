@@ -84,7 +84,7 @@ export const useAuthStore = create((set, get) => ({
       try {
         const { useTaskStore } = await import('./useTaskStore.js');
         useTaskStore.getState().clearTasks();
-      } catch (error) {
+      } catch {
         // Task store might not be loaded yet
       }
       

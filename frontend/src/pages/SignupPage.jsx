@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [step, setStep] = useState(1);
+  // Multi-step signup feature placeholder - not implemented yet
+  // const [step, setStep] = useState(1);
   const { theme } = useThemeStore();
   const [formData, setFormData] = useState({
     fullName: "",

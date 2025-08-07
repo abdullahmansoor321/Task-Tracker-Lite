@@ -124,7 +124,7 @@ const SettingsPage = () => {
         month: 'long',
         day: 'numeric'
       });
-    } catch (error) {
+    } catch {
       return 'Recently';
     }
   };

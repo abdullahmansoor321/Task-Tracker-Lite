@@ -24,7 +24,11 @@ import {
 import TaskForm from '../components/TaskForm';
 
 const DashboardPage = () => {
-  const { tasks, getTasks, updateTask, deleteTask } = useTaskStore();
+    const { 
+    tasks, 
+    getTasks,
+    // isTasksLoading - used for loading states in UI
+  } = useTaskStore();
   const { authUser, refreshUser } = useAuthStore();
   const { theme } = useThemeStore();
   

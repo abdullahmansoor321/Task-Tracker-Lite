@@ -148,9 +148,6 @@ const LoginPage = () => {
                   <span className={`label-text font-medium transition-all duration-300 ${
                     theme === 'dark' ? 'text-gray-300' : 'text-base-content'
                   }`}>Password</span>
-                  <Link to="/forgot-password" className="label-text-alt link text-purple-600 hover:text-purple-700 text-xs">
-                    Forgot password?
-                  </Link>
                 </label>
                 <div className="relative">
                   <Lock className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 transition-all duration-300 ${

@@ -73,11 +73,12 @@ const TaskList = ({ filterStatus: externalFilterStatus = 'all', onFilterChange }
           aValue = a.title.toLowerCase();
           bValue = b.title.toLowerCase();
           break;
-        case 'priority':
+        case 'priority': {
           const priorityOrder = { 'High': 3, 'Medium': 2, 'Low': 1 };
           aValue = priorityOrder[a.priority] || 0;
           bValue = priorityOrder[b.priority] || 0;
           break;
+        }
         default:
           return 0;
       }

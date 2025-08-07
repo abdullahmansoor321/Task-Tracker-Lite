@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Calendar, Edit3, Trash2, CheckCircle, Clock, AlertTriangle, User, Tag, FileText } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
-import { useThemeStore } from '../store/useThemeStore';
 import TaskForm from './TaskForm';
 
 const TaskCard = ({ task }) => {
   const { updateTask, deleteTask, loading } = useTaskStore();
-  const { theme } = useThemeStore();
+  // Remove unused theme variable - using data-theme attribute instead
   const [showEditForm, setShowEditForm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
