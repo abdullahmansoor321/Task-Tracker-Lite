@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Edit3, Trash2, CheckCircle, Clock, AlertTriangle, User, Tag, FileText } from 'lucide-react';
 import { useTaskStore } from '../store/useTaskStore';
 import TaskForm from './TaskForm';
+import toast from 'react-hot-toast';
 
 const TaskCard = ({ task }) => {
   const { updateTask, deleteTask, loading } = useTaskStore();
@@ -86,6 +87,22 @@ const TaskCard = ({ task }) => {
 
   const handleStatusToggle = async () => {
     const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+    
+    // Check if trying to mark as completed with future due date
+    if (newStatus === 'completed') {
+      const today = new Date();
+      const taskDueDate = new Date(task.dueDate);
+      
+      // Set time to start of day for fair comparison
+      today.setHours(0, 0, 0, 0);
+      taskDueDate.setHours(0, 0, 0, 0);
+      
+      if (taskDueDate > today) {
+        toast.error('Cannot mark task as completed before its due date');
+        return;
+      }
+    }
+    
     try {
       await updateTask(task._id, { status: newStatus });
     } catch (error) {

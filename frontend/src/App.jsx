@@ -1,4 +1,3 @@
-// Cache bust: 2025-08-07-logout-fix
 import React, { useEffect } from 'react';
 import Navbar from './components/Navbar.jsx';
 import { Routes, Route, Navigate } from 'react-router-dom';

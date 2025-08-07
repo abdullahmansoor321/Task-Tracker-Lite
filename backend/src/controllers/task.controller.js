@@ -84,6 +84,22 @@ export const updateTask = async (req, res) => {
             return res.status(404).json({ message: "Task not found" });
         }
 
+        // Business rule: Cannot mark task as completed if due date is in the future
+        if (status === "completed") {
+            const today = new Date();
+            const taskDueDate = new Date(task.dueDate);
+            
+            // Set time to start of day for fair comparison
+            today.setHours(0, 0, 0, 0);
+            taskDueDate.setHours(0, 0, 0, 0);
+            
+            if (taskDueDate > today) {
+                return res.status(400).json({ 
+                    message: "Cannot mark task as completed before its due date" 
+                });
+            }
+        }
+
         // Update only the fields that are provided
         const updateData = {};
         if (status !== undefined) updateData.status = status;

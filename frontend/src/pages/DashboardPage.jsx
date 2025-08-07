@@ -664,6 +664,22 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
 
   const handleStatusToggle = async () => {
     const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+    
+    // Check if trying to mark as completed with future due date
+    if (newStatus === 'completed') {
+      const today = new Date();
+      const taskDueDate = new Date(task.dueDate);
+      
+      // Set time to start of day for fair comparison
+      today.setHours(0, 0, 0, 0);
+      taskDueDate.setHours(0, 0, 0, 0);
+      
+      if (taskDueDate > today) {
+        toast.error('Cannot mark task as completed before its due date');
+        return;
+      }
+    }
+    
     await updateTask(task._id, { status: newStatus });
   };
 

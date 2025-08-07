@@ -2,6 +2,10 @@
 
 A modern, full-stack task management application built with the MERN stack, featuring a beautiful UI and comprehensive productivity tools.
 
+## 🌐 Live Demo
+
+**🔗 [View Live Application](https://task-tracker-lite-mu.vercel.app/)**
+
 ## ✨ Features
 
 ### 🎯 Core Functionality
