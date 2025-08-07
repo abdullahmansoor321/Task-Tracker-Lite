@@ -153,6 +153,58 @@ Task-Tracker-Lite/
 └── README.md
 ```
 
+## 🚀 Deployment
+
+### Backend Deployment (Render)
+
+1. **Create a Render account** at [render.com](https://render.com)
+
+2. **Connect your GitHub repository** to Render
+
+3. **Create a new Web Service**:
+   - Root Directory: `backend`
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+
+4. **Set Environment Variables**:
+   ```
+   NODE_ENV=production
+   PORT=10000
+   MONGODB_URI=your_mongodb_atlas_connection_string
+   JWT_SECRET=your_secure_jwt_secret
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   FRONTEND_URL=your_vercel_frontend_url
+   ```
+
+5. **Deploy** - Render will automatically build and deploy your backend
+
+### Frontend Deployment (Vercel)
+
+1. **Create a Vercel account** at [vercel.com](https://vercel.com)
+
+2. **Import your GitHub repository** to Vercel
+
+3. **Configure build settings**:
+   - Framework Preset: `Vite`
+   - Root Directory: `frontend`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+
+4. **Set Environment Variables**:
+   ```
+   VITE_API_URL=your_render_backend_url/api
+   ```
+
+5. **Deploy** - Vercel will automatically build and deploy your frontend
+
+### Post-Deployment Steps
+
+1. **Update CORS**: Add your Vercel frontend URL to the `FRONTEND_URL` environment variable in Render
+2. **Test the application**: Verify all features work in production
+3. **Monitor**: Check logs in both Render and Vercel dashboards
+
 ## 🤝 Contributing
 
 1. Fork the repository
