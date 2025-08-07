@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { useThemeStore } from '../store/useThemeStore';
+import toast from 'react-hot-toast';
 import { 
   Plus, 
   Calendar, 
