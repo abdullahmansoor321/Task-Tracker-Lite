@@ -10,6 +10,8 @@ const getApiUrl = () => {
     return import.meta.env.VITE_API_URL || "http://localhost:5001/api";
 };
 
+console.log("API URL:", getApiUrl()); // Debug log
+
 export const axiosInstance = axios.create({
     baseURL: getApiUrl(),
     withCredentials: true, // Include cookies in requests
