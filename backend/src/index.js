@@ -30,7 +30,11 @@ const getCorsOrigins = () => {
     
     // In production, allow Vercel frontend
     if (process.env.NODE_ENV === 'production') {
-        origins.push("https://task-tracker-lite-mu.vercel.app");
+        origins.push(
+            "https://task-tracker-lite-mu.vercel.app",
+            "https://task-tracker-lite-1a5wjtkfz.vercel.app",
+            "https://task-tracker-lite-abdullahmansoor321s-projects.vercel.app"
+        );
     }
     
     // Always include environment variable if set
