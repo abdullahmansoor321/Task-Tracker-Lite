@@ -125,13 +125,6 @@ const TaskList = ({ filterStatus: externalFilterStatus = 'all', onFilterChange }
 
   return (
     <div className="space-y-6">
-      {/* Debug Info */}
-      <div className="alert alert-info text-xs">
-        <span>TaskList Debug: filterStatus = "{filterStatus}", externalFilterStatus = "{externalFilterStatus}", Total tasks = {tasks.length}</span>
-        <br />
-        <span>Task statuses: {tasks.map(t => `"${t.title}": "${t.status}"`).join(', ')}</span>
-      </div>
-      
       {/* Search and Filters Header */}
       <div className="bg-base-100 rounded-xl shadow-lg p-4 sm:p-6">
         <div className="flex flex-col gap-4">

@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import TaskForm from '../components/TaskForm';
 
-const HomePage = () => {
+const DashboardPage = () => {
   const { tasks, getTasks, updateTask, deleteTask } = useTaskStore();
   const { authUser, refreshUser } = useAuthStore();
   const { theme } = useThemeStore();
@@ -767,4 +767,4 @@ const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
   );
 };
 
-export default HomePage;
+export default DashboardPage;
