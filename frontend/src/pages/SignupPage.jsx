@@ -51,7 +51,7 @@ const SignUpPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
       <div className="grid lg:grid-cols-2 min-h-screen">
         {/* Left side - Form */}
         <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative">
@@ -68,12 +68,12 @@ const SignUpPage = () => {
             {/* Logo & Progress */}
             <div className="text-center mb-8">
               <div className="flex flex-col items-center gap-4 group">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg">
                   <CheckSquare className="w-8 h-8 text-white" />
                 </div>
                 
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                     Join TaskTracker
                   </h1>
                   <p className="text-base-content/60 mt-2">
@@ -84,8 +84,8 @@ const SignUpPage = () => {
                 {/* Progress Steps */}
                 <div className="flex items-center gap-2 mt-4">
                   <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
-                    <span className="text-xs text-primary font-medium">Create Account</span>
+                    <div className="w-2 h-2 rounded-full bg-purple-600"></div>
+                    <span className="text-xs text-purple-600 font-medium">Create Account</span>
                   </div>
                   <div className="w-8 h-px bg-base-300"></div>
                   <div className="flex items-center gap-1">
@@ -105,7 +105,7 @@ const SignUpPage = () => {
             <div className="grid grid-cols-1 gap-3 mb-6">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-base-200/50">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-600/10 flex items-center justify-center text-purple-600">
                     {benefit.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -128,7 +128,7 @@ const SignUpPage = () => {
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
                   <input
                     type="text"
-                    className="input input-bordered w-full pl-10 focus:input-primary"
+                    className="input input-bordered w-full pl-10 focus:border-purple-600 focus:outline-none"
                     placeholder="Enter your full name"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -145,7 +145,7 @@ const SignUpPage = () => {
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
                   <input
                     type="email"
-                    className="input input-bordered w-full pl-10 focus:input-primary"
+                    className="input input-bordered w-full pl-10 focus:border-purple-600 focus:outline-none"
                     placeholder="you@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -162,7 +162,7 @@ const SignUpPage = () => {
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
                   <input
                     type={showPassword ? "text" : "password"}
-                    className="input input-bordered w-full pl-10 pr-10 focus:input-primary"
+                    className="input input-bordered w-full pl-10 pr-10 focus:border-purple-600 focus:outline-none"
                     placeholder="Create a strong password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -188,7 +188,7 @@ const SignUpPage = () => {
 
               <button 
                 type="submit" 
-                className="btn btn-primary w-full gap-2 h-12" 
+                className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 w-full gap-2 h-12" 
                 disabled={isSigningUp}
               >
                 {isSigningUp ? (
@@ -209,16 +209,16 @@ const SignUpPage = () => {
             <div className="text-center">
               <p className="text-xs text-base-content/60 mb-4">
                 By creating an account, you agree to our{" "}
-                <a href="#" className="link link-primary">Terms of Service</a>{" "}
+                <a href="#" className="link text-purple-600 hover:text-purple-700">Terms of Service</a>{" "}
                 and{" "}
-                <a href="#" className="link link-primary">Privacy Policy</a>
+                <a href="#" className="link text-purple-600 hover:text-purple-700">Privacy Policy</a>
               </p>
               
               <div className="divider text-base-content/40">OR</div>
               
               <p className="text-base-content/60">
                 Already have an account?{" "}
-                <Link to="/login" className="link link-primary font-medium">
+                <Link to="/login" className="link text-purple-600 hover:text-purple-700 font-medium">
                   Sign in here
                 </Link>
               </p>
@@ -226,43 +226,81 @@ const SignUpPage = () => {
           </div>
         </div>
 
-        {/* Right side - Enhanced Image Pattern */}
-        <div className="hidden lg:flex relative bg-gradient-to-br from-primary to-secondary overflow-hidden">
-          <div className="absolute inset-0 bg-black/20"></div>
+        {/* Right side - Enhanced Visual */}
+        <div className="hidden lg:flex relative bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 overflow-hidden">
+          <div className="absolute inset-0 bg-black/10"></div>
+          
+          {/* Floating Elements */}
+          <div className="absolute top-16 right-16 w-24 h-24 bg-white/10 rounded-full animate-float"></div>
+          <div className="absolute bottom-24 left-16 w-20 h-20 bg-white/10 rounded-full animate-float-delayed"></div>
+          <div className="absolute top-1/3 right-32 w-16 h-16 bg-white/10 rounded-full animate-pulse"></div>
+          
           <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white">
-            <div className="max-w-md text-center">
-              <h2 className="text-4xl font-bold mb-6">
+            <div className="max-w-lg text-center">
+              <h2 className="text-5xl font-bold mb-4 leading-tight">
                 Welcome to the Future of Productivity
               </h2>
-              <p className="text-xl text-white/90 mb-8">
-                Join over 10,000+ professionals who have transformed their workflow with our powerful task management platform.
+              <p className="text-xl text-white/90 mb-12 leading-relaxed">
+                Join 50,000+ professionals who have transformed their workflow with our powerful task management platform.
               </p>
               
-              <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-                  <div className="text-2xl font-bold">10,000+</div>
-                  <div className="text-sm text-white/80">Active Users</div>
+              <div className="space-y-6">
+                {/* Achievement Card */}
+                <div className="bg-white/15 rounded-xl p-6 backdrop-blur-sm text-left border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-white/25 flex items-center justify-center">
+                      <CheckSquare className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-bold text-lg">Join Elite Users</div>
+                      <div className="text-white/80">Be part of productivity revolution</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🚀</span>
+                    <span className="text-white/90 font-medium">Start your journey to peak productivity today!</span>
+                  </div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-                  <div className="text-2xl font-bold">99.9%</div>
-                  <div className="text-sm text-white/80">Uptime</div>
+                
+                {/* Success Stats Card */}
+                <div className="bg-white/15 rounded-xl p-6 backdrop-blur-sm text-left border border-white/20 hover:bg-white/20 transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-white/25 flex items-center justify-center">
+                      <Users className="w-6 h-6" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-bold text-lg">Proven Results</div>
+                      <div className="text-white/80">Real success stories</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">📈</span>
+                    <span className="text-white/90 font-medium">Users report 40% productivity increase!</span>
+                  </div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-                  <div className="text-2xl font-bold">4.9★</div>
-                  <div className="text-sm text-white/80">User Rating</div>
-                </div>
-                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-                  <div className="text-2xl font-bold">24/7</div>
-                  <div className="text-sm text-white/80">Support</div>
+
+                {/* Quick Stats */}
+                <div className="grid grid-cols-2 gap-4 mt-8">
+                  <div className="bg-white/15 rounded-xl p-4 backdrop-blur-sm text-center border border-white/20">
+                    <div className="text-2xl font-bold">50K+</div>
+                    <div className="text-sm text-white/80">Happy Users</div>
+                  </div>
+                  <div className="bg-white/15 rounded-xl p-4 backdrop-blur-sm text-center border border-white/20">
+                    <div className="text-2xl font-bold">99.9%</div>
+                    <div className="text-sm text-white/80">Uptime</div>
+                  </div>
+                  <div className="bg-white/15 rounded-xl p-4 backdrop-blur-sm text-center border border-white/20">
+                    <div className="text-2xl font-bold">4.9★</div>
+                    <div className="text-sm text-white/80">Rating</div>
+                  </div>
+                  <div className="bg-white/15 rounded-xl p-4 backdrop-blur-sm text-center border border-white/20">
+                    <div className="text-2xl font-bold">24/7</div>
+                    <div className="text-sm text-white/80">Support</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          
-          {/* Animated Background Elements */}
-          <div className="absolute top-10 right-10 w-20 h-20 bg-white/10 rounded-full animate-bounce delay-1000"></div>
-          <div className="absolute bottom-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-pulse"></div>
-          <div className="absolute top-1/2 right-20 w-12 h-12 bg-white/10 rounded-full animate-ping"></div>
         </div>
       </div>
     </div>

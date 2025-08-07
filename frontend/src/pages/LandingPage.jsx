@@ -73,10 +73,10 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="navbar-start">
             <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity duration-200">
-              <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg">
+              <div className="p-2 bg-gradient-to-r from-purple-600 to-purple-800 rounded-xl shadow-lg">
                 <CheckSquare className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden sm:inline">
+              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent hidden sm:inline">
                 TaskTracker
               </span>
             </Link>
@@ -84,17 +84,17 @@ const LandingPage = () => {
           
           <div className="navbar-center hidden lg:flex">
             <ul className="flex items-center gap-1">
-              <li><a href="#features" className="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">Features</a></li>
-              <li><a href="#testimonials" className="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">Reviews</a></li>
-              <li><a href="#pricing" className="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200">Pricing</a></li>
+              <li><a href="#features" className="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200">Features</a></li>
+              <li><a href="#testimonials" className="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200">Reviews</a></li>
+              <li><a href="#pricing" className="px-4 py-2 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200">Pricing</a></li>
             </ul>
           </div>
           
           <div className="navbar-end gap-3">
-            <Link to="/login" className="btn btn-ghost font-medium text-gray-700 hover:text-blue-600 hidden sm:flex">
+            <Link to="/login" className="btn btn-ghost font-medium text-gray-700 hover:text-purple-600 hidden sm:flex">
               Sign In
             </Link>
-            <Link to="/signup" className="btn bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+            <Link to="/signup" className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
               Get Started
             </Link>
             
@@ -115,10 +115,10 @@ const LandingPage = () => {
           <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-lg">
             <div className="container mx-auto px-4 py-4">
               <ul className="space-y-2">
-                <li><a href="#features" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" onClick={() => setIsMenuOpen(false)}>Features</a></li>
-                <li><a href="#testimonials" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" onClick={() => setIsMenuOpen(false)}>Reviews</a></li>
-                <li><a href="#pricing" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" onClick={() => setIsMenuOpen(false)}>Pricing</a></li>
-                <li><Link to="/login" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all" onClick={() => setIsMenuOpen(false)}>Sign In</Link></li>
+                <li><a href="#features" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all" onClick={() => setIsMenuOpen(false)}>Features</a></li>
+                <li><a href="#testimonials" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all" onClick={() => setIsMenuOpen(false)}>Reviews</a></li>
+                <li><a href="#pricing" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all" onClick={() => setIsMenuOpen(false)}>Pricing</a></li>
+                <li><Link to="/login" className="block py-3 px-4 rounded-lg font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 transition-all" onClick={() => setIsMenuOpen(false)}>Sign In</Link></li>
               </ul>
             </div>
           </div>
@@ -127,26 +127,20 @@ const LandingPage = () => {
 
       {/* Enhanced Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background Elements */}
+        {/* Enhanced Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
-          <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-400/20 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float"></div>
+          <div className="absolute top-40 right-10 w-72 h-72 bg-purple-600/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float-delayed"></div>
+          <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-purple-500/20 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+          <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-purple-300/10 rounded-full mix-blend-multiply filter blur-2xl opacity-50 animate-float"></div>
         </div>
         
         <div className="container mx-auto px-4 lg:px-8 text-center relative z-10">
           <div className="max-w-5xl mx-auto">
-            {/* Trust Badge */}
-            <div className="flex justify-center mb-8">
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 shadow-lg">
-                <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                <span className="text-sm font-medium text-gray-700">Trusted by 50,000+ users worldwide</span>
-              </div>
-            </div>
             
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-8">
-              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent leading-tight">
+              <span className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 bg-clip-text text-transparent leading-tight">
                 Get Things Done
               </span>
               <br />
@@ -158,17 +152,24 @@ const LandingPage = () => {
               The most intuitive task tracker that helps you stay organized, focused, and productive. 
               Transform chaos into clarity with our powerful yet simple platform designed for modern professionals.
             </p>
+
+            {/* Trust Badge - Moved down */}
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 shadow-lg">
+                <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                <span className="text-sm font-medium text-gray-700">Trusted by 50,000+ users worldwide</span>
+              </div>
+            </div>
             
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Removed Demo */}
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
-              <Link to="/signup" className="btn bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 btn-lg px-8 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 w-full sm:w-auto">
+              <Link to="/signup" className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 btn-lg px-8 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 w-full sm:w-auto">
                 <span>Start Free Today</span>
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
-              <button className="btn btn-outline btn-lg px-8 border-gray-300 text-gray-700 hover:bg-gray-50 w-full sm:w-auto">
-                <Play className="w-5 h-5 mr-2" />
-                Watch Demo
-              </button>
+              <Link to="/login" className="btn btn-outline btn-lg px-8 border-gray-300 text-gray-700 hover:bg-gray-50 w-full sm:w-auto">
+                Sign In
+              </Link>
             </div>
             
             {/* Trust Indicators */}

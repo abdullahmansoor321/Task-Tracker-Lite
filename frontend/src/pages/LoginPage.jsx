@@ -37,7 +37,7 @@ const LoginPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-purple-50">
       <div className="grid lg:grid-cols-2 min-h-screen">
         {/* Left Side - Form */}
         <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative">
@@ -54,12 +54,12 @@ const LoginPage = () => {
             {/* Logo */}
             <div className="text-center mb-8">
               <div className="flex flex-col items-center gap-4 group">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg">
                   <CheckSquare className="w-8 h-8 text-white" />
                 </div>
                 
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                     Welcome Back
                   </h1>
                   <p className="text-base-content/60 mt-2">
@@ -75,7 +75,7 @@ const LoginPage = () => {
               <div className="space-y-2">
                 {quickFeatures.map((feature, index) => (
                   <div key={index} className="flex items-center gap-3 text-sm">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-600/10 flex items-center justify-center text-purple-600">
                       {feature.icon}
                     </div>
                     <span className="text-base-content/80">{feature.text}</span>
@@ -94,7 +94,7 @@ const LoginPage = () => {
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
                   <input
                     type="email"
-                    className="input input-bordered w-full pl-10 focus:input-primary"
+                    className="input input-bordered w-full pl-10 focus:border-purple-600 focus:outline-none"
                     placeholder="Enter your email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -105,7 +105,7 @@ const LoginPage = () => {
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-medium">Password</span>
-                  <Link to="/forgot-password" className="label-text-alt link link-primary text-xs">
+                  <Link to="/forgot-password" className="label-text-alt link text-purple-600 hover:text-purple-700 text-xs">
                     Forgot password?
                   </Link>
                 </label>
@@ -113,7 +113,7 @@ const LoginPage = () => {
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-base-content/40" />
                   <input
                     type={showPassword ? "text" : "password"}
-                    className="input input-bordered w-full pl-10 pr-10 focus:input-primary"
+                    className="input input-bordered w-full pl-10 pr-10 focus:border-purple-600 focus:outline-none"
                     placeholder="Enter your password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -134,7 +134,7 @@ const LoginPage = () => {
 
               <button 
                 type="submit" 
-                className="btn btn-primary w-full gap-2 h-12" 
+                className="btn bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 w-full gap-2 h-12" 
                 disabled={isLoggingIn}
               >
                 {isLoggingIn ? (
@@ -156,7 +156,7 @@ const LoginPage = () => {
               <div className="divider text-base-content/40">OR</div>
               <p className="text-base-content/60">
                 Don't have an account?{" "}
-                <Link to="/signup" className="link link-primary font-medium">
+                <Link to="/signup" className="link text-purple-600 hover:text-purple-700 font-medium">
                   Create one now
                 </Link>
               </p>
