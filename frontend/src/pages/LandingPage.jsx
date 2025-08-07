@@ -80,51 +80,65 @@ const LandingPage = () => {
           ? 'bg-gray-900/95 border-gray-700' 
           : 'bg-white/95 border-gray-100'
       }`}>
-        <div className="container mx-auto px-2 sm:px-4 lg:px-8 relative">
-          <div className="navbar-start">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity duration-200">
-              <div className="p-1.5 sm:p-2 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg sm:rounded-xl shadow-lg">
-                <CheckSquare className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-              </div>
-              <span className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent hidden sm:inline">
-                TaskTracker
-              </span>
-            </Link>
-          </div>
-          
-          <div className="navbar-center hidden lg:flex">
-            <ul className="flex items-center gap-1">
-              <li><a href="#features" className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                theme === 'dark' 
-                  ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
-                  : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
-              }`}>Features</a></li>
-              <li><a href="#testimonials" className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                theme === 'dark' 
-                  ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
-                  : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
-              }`}>Reviews</a></li>
-            </ul>
-          </div>
-          
-          <div className="navbar-end gap-1 sm:gap-2">
-            {/* Main navigation buttons */}
-            <Link to="/login" className={`btn btn-ghost btn-sm sm:btn-md font-medium hidden sm:flex transition-all duration-200 ${
-              theme === 'dark' 
-                ? 'text-gray-300 hover:text-purple-400' 
-                : 'text-gray-700 hover:text-purple-600'
-            }`}>
-              Sign In
-            </Link>
-            <Link to="/signup" className="btn btn-sm sm:btn-md bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
-              <span className="hidden sm:inline">Get Started</span>
-              <span className="sm:hidden">Start</span>
-            </Link>
+        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo Section */}
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity duration-200">
+                <div className="p-1.5 sm:p-2 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg sm:rounded-xl shadow-lg">
+                  <CheckSquare className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                </div>
+                <span className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent hidden sm:inline">
+                  TaskTracker
+                </span>
+              </Link>
+            </div>
             
-            {/* Mobile menu button */}
-            <div className="lg:hidden">
+            {/* Center Navigation - Hidden on mobile */}
+            <div className="hidden lg:flex items-center space-x-6">
+              <a href="#features" className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                theme === 'dark' 
+                  ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
+                  : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
+              }`}>Features</a>
+              <a href="#testimonials" className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                theme === 'dark' 
+                  ? 'text-gray-300 hover:text-purple-400 hover:bg-purple-900/50' 
+                  : 'text-gray-700 hover:text-purple-600 hover:bg-purple-50'
+              }`}>Reviews</a>
+            </div>
+            
+            {/* Right Section */}
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              {/* Auth buttons - Hidden on small screens */}
+              <Link to="/login" className={`btn btn-ghost btn-sm sm:btn-md font-medium hidden sm:flex transition-all duration-200 ${
+                theme === 'dark' 
+                  ? 'text-gray-300 hover:text-purple-400' 
+                  : 'text-gray-700 hover:text-purple-600'
+              }`}>
+                Sign In
+              </Link>
+              <Link to="/signup" className="btn btn-sm sm:btn-md bg-gradient-to-r from-purple-600 to-purple-800 text-white border-0 hover:from-purple-700 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                <span className="hidden sm:inline">Get Started</span>
+                <span className="sm:hidden">Start</span>
+              </Link>
+              
+              {/* Theme Toggle - Hidden on mobile */}
+              <button
+                onClick={toggleTheme}
+                className="btn btn-ghost btn-circle btn-sm sm:btn-md hidden lg:flex"
+                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              >
+                {theme === 'light' ? (
+                  <Moon className="w-5 h-5" />
+                ) : (
+                  <Sun className="w-5 h-5" />
+                )}
+              </button>
+              
+              {/* Mobile menu button */}
               <button 
-                className={`btn btn-ghost btn-square btn-sm sm:btn-md transition-all duration-200 ${
+                className={`lg:hidden btn btn-ghost btn-square btn-sm sm:btn-md transition-all duration-200 ${
                   theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
                 }`}
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -133,19 +147,6 @@ const LandingPage = () => {
               </button>
             </div>
           </div>
-          
-          {/* Theme Toggle Button - Absolutely positioned at far right */}
-          <button
-            onClick={toggleTheme}
-            className="btn btn-ghost btn-circle absolute right-4 top-1/2 transform -translate-y-1/2 hidden lg:flex z-10"
-            title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-          >
-            {theme === 'light' ? (
-              <Moon className="w-5 h-5" />
-            ) : (
-              <Sun className="w-5 h-5" />
-            )}
-          </button>
         </div>
         
         {/* Mobile menu */}
@@ -155,7 +156,7 @@ const LandingPage = () => {
               ? 'bg-gray-900/95 border-gray-700' 
               : 'bg-white/95 border-gray-100'
           }`}>
-            <div className="container mx-auto px-4 py-4">
+            <div className="max-w-7xl mx-auto px-4 py-4">
               <ul className="space-y-2">
                 <li><a href="#features" className={`block py-3 px-4 rounded-lg font-medium transition-all ${
                   theme === 'dark' 
@@ -197,7 +198,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Enhanced Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden mt-4">
         {/* Enhanced Background Elements */}
         <div className="absolute inset-0">
           <div className={`absolute top-20 left-10 w-72 h-72 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-float ${
