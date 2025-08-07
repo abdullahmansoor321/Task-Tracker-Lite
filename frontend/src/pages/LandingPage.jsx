@@ -82,7 +82,7 @@ const LandingPage = () => {
       }`}>
         <div className="container mx-auto px-2 sm:px-4 lg:px-8 relative">
           <div className="navbar-start">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity duration-200">
+            <Link to="/landing" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity duration-200">
               <div className="p-1.5 sm:p-2 bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg sm:rounded-xl shadow-lg">
                 <CheckSquare className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>

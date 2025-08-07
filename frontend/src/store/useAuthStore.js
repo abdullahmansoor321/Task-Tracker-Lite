@@ -93,9 +93,6 @@ export const useAuthStore = create((set, get) => ({
       
       toast.success("Logged out successfully!");
       
-      // Don't use hard redirect, let React Router handle it
-      // The App.jsx will automatically redirect to login when authUser is null
-      
     } catch (error) {
       console.error("Error during logout:", error);
       set({ isLoggingOut: false });
