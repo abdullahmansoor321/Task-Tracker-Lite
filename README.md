@@ -6,6 +6,12 @@ A modern, full-stack task management application built with the MERN stack, feat
 
 **🔗 [View Live Application](https://task-tracker-lite-mu.vercel.app/)**
 
+> **Deployment Stack:**
+> - **Frontend**: [Vercel](https://vercel.com) - React/Vite with automatic GitHub deployments
+> - **Backend**: [Render](https://render.com) - Node.js/Express API with auto-scaling
+> - **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas) - Cloud NoSQL database
+> - **Storage**: [Cloudinary](https://cloudinary.com) - Image and file CDN
+
 ## ✨ Features
 
 ### 🎯 Core Functionality
@@ -47,9 +53,21 @@ A modern, full-stack task management application built with the MERN stack, feat
 - **🔒 JWT** - Authentication
 - **☁️ Cloudinary** - Image hosting
 
-### Tasks
+### Backend API Endpoints
+
+#### Authentication
+- `POST /api/auth/signup` - Register new user
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/me` - Get current user
+- `PUT /api/auth/update-profile` - Update user profile
+
+#### Tasks
 - `POST /api/tasks` - Create new task
 - `GET /api/tasks` - Get user's tasks (with pagination)
+- `PUT /api/tasks/:id` - Update task
+- `DELETE /api/tasks/:id` - Delete task
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -202,7 +220,7 @@ Task-Tracker-Lite/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## �‍💻 Author
+## 👨‍💻 Author
 
 **Abdullah Mansoor**
 - GitHub: [@abdullahmansoor321](https://github.com/abdullahmansoor321)
