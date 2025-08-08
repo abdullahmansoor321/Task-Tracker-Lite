@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { useThemeStore } from '../store/useThemeStore';
+import TaskList from '../components/TaskList';
 import toast from 'react-hot-toast';
 import { 
   Plus, 
@@ -12,17 +13,11 @@ import {
   AlertTriangle,
   Target,
   Zap,
-  Award,
-  BarChart3,
   Activity,
-  Star,
-  Filter,
-  Search,
-  Edit3,
-  Trash2,
-  X
+  Star
 } from 'lucide-react';
 import TaskForm from '../components/TaskForm';
+import { isTaskOverdue, getDaysUntilDue } from '../lib/taskUtils';
 
 const DashboardPage = () => {
     const { 
@@ -38,10 +33,6 @@ const DashboardPage = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [greeting, setGreeting] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [priorityFilter, setPriorityFilter] = useState('all');
-  const [categoryFilter, setCategoryFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
 
   // Scroll to task management section
   const scrollToTaskManagement = () => {
@@ -55,12 +46,8 @@ const DashboardPage = () => {
   };
 
   // Handle filter changes with scroll
-  const handleFilterChange = (filterType, value) => {
-    if (filterType === 'status') {
-      setActiveFilter(value);
-    } else if (filterType === 'statusDropdown') {
-      setStatusFilter(value);
-    }
+  const handleFilterChange = (value) => {
+    setActiveFilter(value);
     scrollToTaskManagement();
   };
 
@@ -80,15 +67,12 @@ const DashboardPage = () => {
     return 'Good evening';
   };
 
-  // Calculate statistics
+  // Calculate statistics using shared utility
   const stats = {
     total: tasks.length,
     completed: tasks.filter(task => task.status === 'completed').length,
     pending: tasks.filter(task => task.status === 'pending').length,
-    overdue: tasks.filter(task => {
-      if (task.status === 'completed') return false;
-      return new Date(task.dueDate) < new Date();
-    }).length
+    overdue: tasks.filter(task => isTaskOverdue(task)).length
   };
 
   const completionRate = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
@@ -105,55 +89,6 @@ const DashboardPage = () => {
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate))
     .slice(0, 5);
 
-  // Filter tasks based on active filters
-  const getFilteredTasks = () => {
-    let filtered = [...tasks];
-
-    // Apply status filter (from cards)
-    if (activeFilter === 'completed') {
-      filtered = filtered.filter(task => task.status === 'completed');
-    } else if (activeFilter === 'pending') {
-      filtered = filtered.filter(task => task.status === 'pending');
-    } else if (activeFilter === 'overdue') {
-      filtered = filtered.filter(task => 
-        task.status === 'pending' && new Date(task.dueDate) < new Date()
-      );
-    }
-
-    // Apply status filter (from dropdown)
-    if (statusFilter !== 'all') {
-      if (statusFilter === 'overdue') {
-        filtered = filtered.filter(task => 
-          task.status === 'pending' && new Date(task.dueDate) < new Date()
-        );
-      } else {
-        filtered = filtered.filter(task => task.status === statusFilter);
-      }
-    }
-
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(task => 
-        task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        task.description?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply priority filter
-    if (priorityFilter !== 'all') {
-      filtered = filtered.filter(task => task.priority === priorityFilter);
-    }
-
-    // Apply category filter
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(task => task.category === categoryFilter);
-    }
-
-    return filtered;
-  };
-
-  const filteredTasks = getFilteredTasks();
-
   const handleTaskEdit = (task) => {
     setEditingTask(task);
     setShowTaskForm(true);
@@ -162,27 +97,6 @@ const DashboardPage = () => {
   const handleTaskFormClose = () => {
     setShowTaskForm(false);
     setEditingTask(null);
-  };
-
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'High': return 'badge-error';
-      case 'Medium': return 'badge-warning';
-      case 'Low': return 'badge-success';
-      default: return 'badge-ghost';
-    }
-  };
-
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'Work': return '💼';
-      case 'Personal': return '🏠';
-      case 'Health': return '🏃';
-      case 'Study': return '📚';
-      case 'Finance': return '💰';
-      case 'Other': return '📝';
-      default: return '📝';
-    }
   };
 
   return (
@@ -231,16 +145,18 @@ const DashboardPage = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 mb-4 sm:mb-6">
           {/* Total Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl ${
+            className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
               theme === 'light' 
                 ? 'bg-blue-500 text-white border-0' 
                 : 'bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20'
-            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+            } transition-all duration-300 hover:shadow-2xl ${
               theme === 'light' 
                 ? 'hover:shadow-blue-500/25 hover:bg-blue-600' 
                 : 'hover:shadow-primary/25'
             } hover:-translate-y-1 ${activeFilter === 'all' ? (theme === 'light' ? 'ring-2 ring-blue-300 shadow-lg shadow-blue-500/20' : 'ring-2 ring-primary shadow-lg shadow-primary/20') : ''}`}
-            onClick={() => handleFilterChange('status', 'all')}
+            onClick={() => {
+              handleFilterChange('all');
+            }}
           >
             <div className={`absolute inset-0 ${
               theme === 'light' 
@@ -269,16 +185,16 @@ const DashboardPage = () => {
 
           {/* Completed Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl ${
+            className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
               theme === 'light' 
                 ? 'bg-green-500 text-white border-0' 
                 : 'bg-gradient-to-br from-success/10 via-success/5 to-transparent border border-success/20'
-            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+            } transition-all duration-300 hover:shadow-2xl ${
               theme === 'light' 
                 ? 'hover:shadow-green-500/25 hover:bg-green-600' 
                 : 'hover:shadow-success/25'
             } hover:-translate-y-1 ${activeFilter === 'completed' ? (theme === 'light' ? 'ring-2 ring-green-300 shadow-lg shadow-green-500/20' : 'ring-2 ring-success shadow-lg shadow-success/20') : ''}`}
-            onClick={() => handleFilterChange('status', 'completed')}
+            onClick={() => handleFilterChange('completed')}
           >
             <div className={`absolute inset-0 ${
               theme === 'light' 
@@ -307,16 +223,16 @@ const DashboardPage = () => {
 
           {/* Pending Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl ${
+            className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
               theme === 'light' 
                 ? 'bg-orange-500 text-white border-0' 
                 : 'bg-gradient-to-br from-warning/10 via-warning/5 to-transparent border border-warning/20'
-            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+            } transition-all duration-300 hover:shadow-2xl ${
               theme === 'light' 
                 ? 'hover:shadow-orange-500/25 hover:bg-orange-600' 
                 : 'hover:shadow-warning/25'
             } hover:-translate-y-1 ${activeFilter === 'pending' ? (theme === 'light' ? 'ring-2 ring-orange-300 shadow-lg shadow-orange-500/20' : 'ring-2 ring-warning shadow-lg shadow-warning/20') : ''}`}
-            onClick={() => handleFilterChange('status', 'pending')}
+            onClick={() => handleFilterChange('pending')}
           >
             <div className={`absolute inset-0 ${
               theme === 'light' 
@@ -345,16 +261,16 @@ const DashboardPage = () => {
 
           {/* Overdue Tasks Card */}
           <div 
-            className={`group relative overflow-hidden rounded-2xl ${
+            className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
               theme === 'light' 
                 ? 'bg-red-500 text-white border-0' 
                 : 'bg-gradient-to-br from-error/10 via-error/5 to-transparent border border-error/20'
-            } cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+            } transition-all duration-300 hover:shadow-2xl ${
               theme === 'light' 
                 ? 'hover:shadow-red-500/25 hover:bg-red-600' 
                 : 'hover:shadow-error/25'
             } hover:-translate-y-1 ${activeFilter === 'overdue' ? (theme === 'light' ? 'ring-2 ring-red-300 shadow-lg shadow-red-500/20' : 'ring-2 ring-error shadow-lg shadow-error/20') : ''}`}
-            onClick={() => handleFilterChange('status', 'overdue')}
+            onClick={() => handleFilterChange('overdue')}
           >
             <div className={`absolute inset-0 ${
               theme === 'light' 
@@ -426,7 +342,7 @@ const DashboardPage = () => {
                 </button>
                 
                 <button 
-                  onClick={() => handleFilterChange('status', 'completed')}
+                  onClick={() => handleFilterChange('completed')}
                   className={`btn w-full gap-2 ${activeFilter === 'completed' ? 'btn-success' : 'btn-outline'}`}
                 >
                   <CheckCircle className="w-4 h-4" />
@@ -434,7 +350,7 @@ const DashboardPage = () => {
                 </button>
                 
                 <button 
-                  onClick={() => handleFilterChange('status', 'overdue')}
+                  onClick={() => handleFilterChange('overdue')}
                   className={`btn w-full gap-2 ${activeFilter === 'overdue' ? 'btn-error' : 'btn-outline'}`}
                 >
                   <AlertTriangle className="w-4 h-4" />
@@ -455,7 +371,7 @@ const DashboardPage = () => {
               {upcomingTasks.length > 0 ? (
                 <div className="space-y-3">
                   {upcomingTasks.map((task) => {
-                    const daysUntilDue = Math.ceil((new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
+                    const daysUntilDue = getDaysUntilDue(task.dueDate);
                     const isUrgent = daysUntilDue <= 1;
                     
                     return (
@@ -498,147 +414,14 @@ const DashboardPage = () => {
         </div>
 
         {/* Task Management Section */}
-        <div id="task-management" className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="card-title">
-                Task Management 
-                <span className="badge badge-neutral">{filteredTasks.length}</span>
-              </h3>
-              <button 
-                onClick={() => setShowTaskForm(true)}
-                className="btn btn-primary gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                Add Task
-              </button>
-            </div>
-
-            {/* Filters */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-4 mb-4 sm:mb-6">
-              <div className="relative sm:col-span-2 lg:col-span-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/40 w-4 h-4 sm:w-5 sm:h-5" />
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input input-bordered input-sm sm:input-md w-full pl-8 sm:pl-10 text-sm sm:text-base"
-                />
-              </div>
-
-              <select
-                value={statusFilter}
-                onChange={(e) => handleFilterChange('statusDropdown', e.target.value)}
-                className="select select-bordered select-sm sm:select-md text-sm sm:text-base"
-              >
-                <option value="all">All Status</option>
-                <option value="pending">⏰ Pending</option>
-                <option value="completed">✅ Completed</option>
-                <option value="overdue">🚨 Overdue</option>
-              </select>
-
-              <select
-                value={priorityFilter}
-                onChange={(e) => setPriorityFilter(e.target.value)}
-                className="select select-bordered select-sm sm:select-md text-sm sm:text-base"
-              >
-                <option value="all">All Priorities</option>
-                <option value="High">🔴 High Priority</option>
-                <option value="Medium">🟡 Medium Priority</option>
-                <option value="Low">🟢 Low Priority</option>
-              </select>
-
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="select select-bordered select-sm sm:select-md text-sm sm:text-base"
-              >
-                <option value="all">All Categories</option>
-                <option value="Work">Work</option>
-                <option value="Personal">Personal</option>
-                <option value="Health">Health</option>
-                <option value="Study">Study</option>
-                <option value="Finance">Finance</option>
-                <option value="Other">Other</option>
-              </select>
-
-              <button
-                onClick={() => {
-                  setActiveFilter('all');
-                  setSearchTerm('');
-                  setPriorityFilter('all');
-                  setCategoryFilter('all');
-                  setStatusFilter('all');
-                }}
-                className="btn btn-outline btn-sm sm:btn-md text-sm sm:text-base sm:col-span-2 lg:col-span-1"
-              >
-                <span className="hidden sm:inline">Clear Filters</span>
-                <span className="sm:hidden">Clear</span>
-              </button>
-            </div>
-
-            {/* Active Filter Indicator */}
-            {(activeFilter !== 'all' || searchTerm || priorityFilter !== 'all' || categoryFilter !== 'all' || statusFilter !== 'all') && (
-              <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-base-200 rounded-lg">
-                <span className="text-xs sm:text-sm font-medium">Active filters:</span>
-                {activeFilter !== 'all' && (
-                  <span className="badge badge-primary badge-sm sm:badge-md">{activeFilter}</span>
-                )}
-                {searchTerm && (
-                  <span className="badge badge-secondary badge-sm sm:badge-md">Search: {searchTerm}</span>
-                )}
-                {priorityFilter !== 'all' && (
-                  <span className="badge badge-accent badge-sm sm:badge-md">{priorityFilter} Priority</span>
-                )}
-                {categoryFilter !== 'all' && (
-                  <span className="badge badge-info badge-sm sm:badge-md">{categoryFilter}</span>
-                )}
-                {statusFilter !== 'all' && (
-                  <span className="badge badge-warning badge-sm sm:badge-md">Status: {statusFilter}</span>
-                )}
-              </div>
-            )}
-
-            {/* Tasks Grid */}
-            {filteredTasks.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-                {filteredTasks.map((task) => (
-                  <TaskCard 
-                    key={task._id} 
-                    task={task} 
-                    onEdit={handleTaskEdit}
-                    getCategoryIcon={getCategoryIcon}
-                    getPriorityColor={getPriorityColor}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8 sm:py-16 px-4">
-                <div className="max-w-sm mx-auto">
-                  <div className="mb-4 sm:mb-6">
-                    <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-base-content/20" />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-base-content/60 mb-2">
-                    {tasks.length === 0 ? 'No tasks yet' : 'No tasks match your filters'}
-                  </h3>
-                  <p className="text-sm sm:text-base text-base-content/50 mb-4 sm:mb-6">
-                    {tasks.length === 0 
-                      ? 'Create your first task to get started with your productivity journey!'
-                      : 'Try adjusting your filters or create a new task.'
-                    }
-                  </p>
-                  <button 
-                    onClick={() => setShowTaskForm(true)}
-                    className="btn btn-primary btn-sm sm:btn-md gap-2"
-                  >
-                    <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="text-sm sm:text-base">Create Task</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+        <div id="task-management">
+          <TaskList 
+            tasks={tasks}
+            activeFilter={activeFilter}
+            onFilterChange={setActiveFilter}
+            onTaskEdit={handleTaskEdit}
+            onAddTask={() => setShowTaskForm(true)}
+          />
         </div>
       </div>
 
@@ -655,142 +438,6 @@ const DashboardPage = () => {
         </div>
       )}
     </div>
-  );
-};
-
-// TaskCard Component
-const TaskCard = ({ task, onEdit, getCategoryIcon, getPriorityColor }) => {
-  const { updateTask, deleteTask } = useTaskStore();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-  const handleStatusToggle = async () => {
-    const newStatus = task.status === 'completed' ? 'pending' : 'completed';
-    
-    // Check if trying to mark as completed with future due date
-    if (newStatus === 'completed') {
-      const today = new Date();
-      const taskDueDate = new Date(task.dueDate);
-      
-      // Set time to start of day for fair comparison
-      today.setHours(0, 0, 0, 0);
-      taskDueDate.setHours(0, 0, 0, 0);
-      
-      if (taskDueDate > today) {
-        toast.error('Cannot mark task as completed before its due date');
-        return;
-      }
-    }
-    
-    await updateTask(task._id, { status: newStatus });
-  };
-
-  const handleDelete = async () => {
-    await deleteTask(task._id);
-    setShowDeleteConfirm(false);
-  };
-
-  const isOverdue = task.status === 'pending' && new Date(task.dueDate) < new Date();
-  const daysUntilDue = Math.ceil((new Date(task.dueDate) - new Date()) / (1000 * 60 * 60 * 24));
-
-  return (
-    <>
-      <div className={`card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 ${
-        task.status === 'completed' ? 'border-l-green-500 opacity-75' : 
-        isOverdue ? 'border-l-red-500' : 
-        daysUntilDue <= 1 ? 'border-l-orange-500' : 
-        'border-l-blue-500'
-      }`}>
-        <div className="card-body p-3 sm:p-4">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex-1 min-w-0">
-              <h4 className={`font-bold text-sm sm:text-base truncate ${
-                task.status === 'completed' ? 'line-through text-base-content/60' : ''
-              }`}>
-                {task.title}
-              </h4>
-              {task.description && (
-                <p className="text-xs sm:text-sm text-base-content/70 mt-1 line-clamp-2">
-                  {task.description}
-                </p>
-              )}
-            </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => onEdit(task)}
-                className="btn btn-ghost btn-xs sm:btn-sm"
-                title="Edit task"
-              >
-                <Edit3 className="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
-              <button
-                onClick={() => setShowDeleteConfirm(true)}
-                className="btn btn-ghost btn-xs sm:btn-sm text-error"
-                title="Delete task"
-              >
-                <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between mt-2 sm:mt-3">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <span className="text-xs sm:text-sm">{getCategoryIcon(task.category)}</span>
-              <span className={`badge badge-xs sm:badge-sm ${getPriorityColor(task.priority)}`}>
-                {task.priority}
-              </span>
-            </div>
-            <div className="text-xs sm:text-sm text-base-content/60">
-              {isOverdue ? (
-                <span className="text-error font-medium">Overdue</span>
-              ) : (
-                new Date(task.dueDate).toLocaleDateString()
-              )}
-            </div>
-          </div>
-
-          <div className="card-actions justify-end mt-2 sm:mt-3">
-            <button
-              onClick={handleStatusToggle}
-              className={`btn btn-xs sm:btn-sm ${
-                task.status === 'completed' ? 'btn-success' : 'btn-outline'
-              }`}
-            >
-              <span className="hidden sm:inline">
-                {task.status === 'completed' ? 'Completed' : 'Mark Complete'}
-              </span>
-              <span className="sm:hidden">
-                {task.status === 'completed' ? '✓ Done' : '✓ Complete'}
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className="modal modal-open">
-          <div className="modal-box w-11/12 max-w-md mx-4 sm:mx-auto">
-            <h3 className="font-bold text-lg">Delete Task</h3>
-            <p className="py-4 text-sm sm:text-base">Are you sure you want to delete "{task.title}"? This action cannot be undone.</p>
-            <div className="modal-action flex-col sm:flex-row gap-2">
-              <button 
-                onClick={() => setShowDeleteConfirm(false)}
-                className="btn btn-ghost btn-sm sm:btn-md w-full sm:w-auto"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={handleDelete}
-                className="btn btn-error btn-sm sm:btn-md w-full sm:w-auto"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-          <div className="modal-backdrop" onClick={() => setShowDeleteConfirm(false)} />
-        </div>
-      )}
-    </>
   );
 };
 

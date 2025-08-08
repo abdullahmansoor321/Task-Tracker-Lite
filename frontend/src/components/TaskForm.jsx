@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/useTaskStore';
-import { X, Plus, CalendarDays, Tag, AlertCircle, Save } from 'lucide-react';
+import { X, CalendarDays, Tag, AlertCircle, Save } from 'lucide-react';
 
 const TaskForm = ({ onClose, taskToEdit = null }) => {
   const { createTask, updateTask, isCreatingTask, isUpdatingTask } = useTaskStore();
