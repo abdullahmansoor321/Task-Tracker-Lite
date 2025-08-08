@@ -12,7 +12,7 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware must be before routes
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Increase body size limit for image uploads
 app.use(cookieParser()); 
 // CORS configuration with environment detection
 const getCorsOrigins = () => {

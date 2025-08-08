@@ -94,15 +94,12 @@ const SettingsPage = () => {
     try {
       await updateProfile({
         fullName: profileFormData.fullName,
-        profilePic: selectedImage
+        profilePic: imagePreview // send base64 string
       });
-      
       setIsEditingProfile(false);
       setSelectedImage(null);
       setImagePreview(null);
-      toast.success('Profile updated successfully! 🎉');
     } catch (error) {
-      toast.error(error.message || 'Failed to update profile');
     }
   };
 
@@ -111,7 +108,6 @@ const SettingsPage = () => {
       ...prev,
       [setting]: value
     }));
-    // Here you would typically save to backend
     toast.success('Settings updated');
   };
 

@@ -114,18 +114,27 @@ export const updateProfile = async (req, res) => {
         }
 
         if (profilePic) {
-            const uploadResponse = await cloudinary.uploader.upload(profilePic);
-            updateData.profilePic = uploadResponse.secure_url;
+            try {
+                const uploadResponse = await cloudinary.uploader.upload(profilePic);
+                updateData.profilePic = uploadResponse.secure_url;
+            } catch (cloudErr) {
+                console.error("Cloudinary upload error:", cloudErr.message);
+                return res.status(500).json({ message: "Image upload failed" });
+            }
         }
 
         const updatedUser = await User.findByIdAndUpdate(userId, updateData, { 
             new: true 
         }).select('-password');
 
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         res.status(200).json(updatedUser);
     } catch (error) {
         console.error("Error updating profile:", error.message);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: error.message || "Internal server error" });
     }
 }
 
