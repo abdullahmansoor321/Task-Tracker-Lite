@@ -1,12 +1,10 @@
 import Task from "../models/task.model.js";
 
-// POST /tasks → Add task (only logged-in user)
 export const createTask = async (req, res) => {
     try {
         const { title, description, dueDate, priority, category } = req.body;
         const userId = req.user._id;
 
-        // Validate required fields
         if (!title || !dueDate) {
             return res.status(400).json({ message: "Title and due date are required" });
         }
@@ -29,20 +27,16 @@ export const createTask = async (req, res) => {
     }
 };
 
-// GET /tasks → Fetch only logged-in user's tasks with pagination
 export const getTasks = async (req, res) => {
     try {
         const userId = req.user._id;
         
-        // Pagination parameters
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        // Get total count for pagination info
         const totalTasks = await Task.countDocuments({ userId });
         
-        // Get paginated tasks
         const tasks = await Task.find({ userId })
             .sort({ createdAt: -1 })
             .skip(skip)
@@ -70,7 +64,6 @@ export const getTasks = async (req, res) => {
     }
 };
 
-// PATCH /tasks/:id → Update task status or other fields
 export const updateTask = async (req, res) => {
     try {
         const { id } = req.params;
@@ -122,7 +115,6 @@ export const updateTask = async (req, res) => {
     }
 };
 
-// DELETE /tasks/:id → Delete a task (only task owner)
 export const deleteTask = async (req, res) => {
     try {
         const { id } = req.params;
@@ -145,7 +137,6 @@ export const deleteTask = async (req, res) => {
     }
 };
 
-// GET /tasks/overdue → Fetch tasks with dueDate < today and status != completed with pagination
 export const getOverdueTasks = async (req, res) => {
     try {
         const userId = req.user._id;

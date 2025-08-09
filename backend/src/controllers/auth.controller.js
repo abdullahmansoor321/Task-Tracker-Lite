@@ -30,7 +30,6 @@ export const signup = async (req, res) => {
         });
 
         if (newUser) {
-            // generate JWT token here
             generateToken(newUser._id, res);
             await newUser.save();
 
@@ -65,7 +64,7 @@ export const login = async(req, res) => {
         if(!isPasswordCorrect){
             return res.status(400).json({message:"Invalid credentials"});
         }
-        // generate JWT token here
+        
         generateToken(user._id, res);
         res.status(200).json({
             _id: user._id,
@@ -83,14 +82,12 @@ export const login = async(req, res) => {
 export const logout = (req, res) => {
     try{
         res.cookie("jwt", "", {
-            maxAge: 0, // Clear the cookie
+            maxAge: 0,
             httpOnly: true,
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             secure: process.env.NODE_ENV === 'production'
         });
         res.status(200).json({ message: "Logged out successfully" });
-
-
     }
     catch(error){
         console.error("Error during logout:", error.message);
