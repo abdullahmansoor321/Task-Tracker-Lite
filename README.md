@@ -15,7 +15,6 @@ A modern, full-stack task management application built with the MERN stack, feat
 ## ✨ Features
 
 ### 🎯 Core Functionality
-### 🎯 Core Functionality
 - **Task Management**: Create, edit, delete, and organize tasks
 - **Smart Filtering**: Filter tasks by status, priority, category, and due dates
 - **Pagination**: View 10 tasks per page with previous/next navigation
