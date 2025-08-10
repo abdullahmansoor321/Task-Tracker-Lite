@@ -5,8 +5,11 @@ import {
     createTask, 
     updateTask, 
     getOverdueTasks,
-    deleteTask 
+    deleteTask,
+    getTaskStats
 } from '../controllers/task.controller.js';
+
+
 
 const router = express.Router();
 
@@ -18,6 +21,9 @@ router.get("/", protectRoute, getTasks);
 
 // GET /tasks/overdue → Fetch tasks with dueDate < today and status != completed
 router.get("/overdue", protectRoute, getOverdueTasks);
+
+// GET /tasks/stats → Get task statistics
+router.get("/stats", protectRoute, getTaskStats);
 
 // PATCH /tasks/:id → Update task status or description
 router.patch("/:id", protectRoute, updateTask);

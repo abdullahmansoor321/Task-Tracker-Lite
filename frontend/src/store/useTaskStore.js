@@ -6,19 +6,43 @@ export const useTaskStore = create((set, get) => ({
     tasks: [],
     overdueTasks: [],
     pagination: null,
+    taskStats: null,
+    currentFilter: 'all', // Track current filter
     isTasksLoading: false,
     isCreatingTask: false,
     isUpdatingTask: false,
     isDeletingTask: false,
 
-    // Get all tasks with pagination
-    getTasks: async (page = 1, limit = 10) => {
-        set({ isTasksLoading: true });
+    // Get task statistics (separate from paginated tasks)
+    getTaskStats: async () => {
         try {
-            const res = await axiosInstance.get(`/tasks?page=${page}&limit=${limit}`);
+            const res = await axiosInstance.get('/tasks/stats');
+            set({ taskStats: res.data });
+        } catch (error) {
+            console.error("Error fetching task stats:", error);
+            if (error.response?.status !== 401) {
+                toast.error("Failed to load task statistics");
+            }
+        }
+    },
+
+    // Get tasks with pagination and filtering
+    getTasks: async (page = 1, limit = 10, filter = 'all') => {
+        set({ isTasksLoading: true, currentFilter: filter });
+        try {
+            let endpoint = `/tasks?page=${page}&limit=${limit}`;
+            
+            // Add filter to endpoint based on filter type
+            if (filter === 'overdue') {
+                endpoint = `/tasks/overdue?page=${page}&limit=${limit}`;
+            } else if (filter !== 'all') {
+                endpoint = `/tasks?page=${page}&limit=${limit}&status=${filter}`;
+            }
+            
+            const res = await axiosInstance.get(endpoint);
             set({ 
                 tasks: res.data.tasks, 
-                pagination: res.data.pagination 
+                pagination: res.data.pagination
             });
         } catch (error) {
             console.error("Error fetching tasks:", error);
@@ -56,11 +80,15 @@ export const useTaskStore = create((set, get) => ({
         set({ isCreatingTask: true });
         try {
             const res = await axiosInstance.post('/tasks', taskData);
-            // Refresh current page data to get updated counts
+            
+            // After creating a task, refresh the current page and stats
             const currentState = get();
-            if (currentState.pagination) {
-                currentState.getTasks(currentState.pagination.currentPage);
-            }
+            const currentPage = currentState.pagination?.currentPage || 1;
+            const currentFilter = currentState.currentFilter || 'all';
+            
+            await currentState.getTasks(currentPage, 10, currentFilter);
+            await currentState.getTaskStats(); // Refresh stats
+            
             toast.success("Task created successfully");
             return res.data;
         } catch (error) {
@@ -77,11 +105,14 @@ export const useTaskStore = create((set, get) => ({
         set({ isUpdatingTask: true });
         try {
             const res = await axiosInstance.patch(`/tasks/${taskId}`, updateData);
-            // Refresh current page data to get updated information
+            
+            // After updating, refresh the current page and stats
             const currentState = get();
-            if (currentState.pagination) {
-                currentState.getTasks(currentState.pagination.currentPage);
-            }
+            const currentPage = currentState.pagination?.currentPage || 1;
+            const currentFilter = currentState.currentFilter || 'all';
+            await currentState.getTasks(currentPage, 10, currentFilter);
+            await currentState.getTaskStats(); // Refresh stats
+            
             toast.success("Task updated successfully");
             return res.data;
         } catch (error) {
@@ -98,11 +129,23 @@ export const useTaskStore = create((set, get) => ({
         set({ isDeletingTask: true });
         try {
             await axiosInstance.delete(`/tasks/${taskId}`);
-            // Refresh current page data to get updated counts
+            
+            // After deleting, refresh the current page and stats
             const currentState = get();
-            if (currentState.pagination) {
-                currentState.getTasks(currentState.pagination.currentPage);
+            const currentPage = currentState.pagination?.currentPage || 1;
+            const currentFilter = currentState.currentFilter || 'all';
+            const totalPages = currentState.pagination?.totalPages || 1;
+            
+            // If we deleted the last item on the last page (and it's not page 1), 
+            // go back one page
+            const tasksOnCurrentPage = currentState.tasks.length;
+            if (tasksOnCurrentPage === 1 && currentPage > 1 && currentPage === totalPages) {
+                await currentState.getTasks(currentPage - 1, 10, currentFilter);
+            } else {
+                await currentState.getTasks(currentPage, 10, currentFilter);
             }
+            await currentState.getTaskStats(); // Refresh stats
+            
             toast.success("Task deleted successfully");
         } catch (error) {
             console.error("Error deleting task:", error);
@@ -115,13 +158,22 @@ export const useTaskStore = create((set, get) => ({
 
     // Toggle task status (pending <-> completed)
     toggleTaskStatus: async (taskId) => {
-        const task = get().tasks.find(t => t._id === taskId) || 
-                    get().overdueTasks.find(t => t._id === taskId);
+        const currentState = get();
+        const task = currentState.tasks.find(t => t._id === taskId) || 
+                    currentState.overdueTasks.find(t => t._id === taskId);
         
         if (!task) return;
 
         const newStatus = task.status === "pending" ? "completed" : "pending";
-        await get().updateTask(taskId, { status: newStatus });
+        await currentState.updateTask(taskId, { status: newStatus });
+    },
+
+    // Refresh current page and stats - useful for external calls
+    refreshCurrentPage: async () => {
+        const currentState = get();
+        const currentPage = currentState.pagination?.currentPage || 1;
+        await currentState.getTasks(currentPage);
+        await currentState.getTaskStats();
     },
 
     // Clear tasks (for logout)
@@ -129,7 +181,8 @@ export const useTaskStore = create((set, get) => ({
         set({
             tasks: [],
             overdueTasks: [],
-            pagination: null
+            pagination: null,
+            taskStats: null
         });
     }
 }));

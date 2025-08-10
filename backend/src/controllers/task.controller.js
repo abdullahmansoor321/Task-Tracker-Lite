@@ -33,17 +33,41 @@ export const getTasks = async (req, res) => {
         
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
+        const status = req.query.status; // Get status filter from query
         const skip = (page - 1) * limit;
 
-        const totalTasks = await Task.countDocuments({ userId });
+        // Build query object
+        let query = { userId };
         
-        const tasks = await Task.find({ userId })
+        // Add status filter if provided
+        if (status && status !== 'all') {
+            query.status = status;
+        }
+
+        // Get total counts for all statuses (for stats)
+        const totalTasks = await Task.countDocuments({ userId });
+        const completedTasks = await Task.countDocuments({ userId, status: "completed" });
+        const pendingTasks = await Task.countDocuments({ userId, status: "pending" });
+        
+        // Get overdue count
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+        const overdueTasks = await Task.countDocuments({
+            userId,
+            dueDate: { $lt: today },
+            status: { $ne: "completed" }
+        });
+
+        // Get filtered task count for pagination
+        const filteredTaskCount = await Task.countDocuments(query);
+        
+        const tasks = await Task.find(query)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
-        // Calculate pagination info
-        const totalPages = Math.ceil(totalTasks / limit);
+        // Calculate pagination info based on filtered results
+        const totalPages = Math.ceil(filteredTaskCount / limit);
         const hasNextPage = page < totalPages;
         const hasPrevPage = page > 1;
 
@@ -52,10 +76,14 @@ export const getTasks = async (req, res) => {
             pagination: {
                 currentPage: page,
                 totalPages,
-                totalTasks,
+                totalTasks: filteredTaskCount, // Use filtered count for this pagination
+                completedTasks,
+                pendingTasks,
+                overdueTasks,
                 hasNextPage,
                 hasPrevPage,
-                limit
+                limit,
+                filter: status || 'all'
             }
         });
     } catch (error) {
@@ -182,6 +210,38 @@ export const getOverdueTasks = async (req, res) => {
         });
     } catch (error) {
         console.error("Error fetching overdue tasks:", error.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+// New endpoint to get task statistics
+export const getTaskStats = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Get total counts for all statuses
+        const totalTasks = await Task.countDocuments({ userId });
+        const completedTasks = await Task.countDocuments({ userId, status: "completed" });
+        const pendingTasks = await Task.countDocuments({ userId, status: "pending" });
+        
+        // Get overdue count
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+        const overdueTasks = await Task.countDocuments({
+            userId,
+            dueDate: { $lt: today },
+            status: { $ne: "completed" }
+        });
+
+        res.status(200).json({
+            totalTasks,
+            completedTasks,
+            pendingTasks,
+            overdueTasks,
+            completionRate: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+        });
+    } catch (error) {
+        console.error("Error fetching task stats:", error.message);
         res.status(500).json({ message: "Internal server error" });
     }
 };

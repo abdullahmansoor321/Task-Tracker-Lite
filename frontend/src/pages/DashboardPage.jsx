@@ -20,10 +20,13 @@ import TaskForm from '../components/TaskForm';
 import { isTaskOverdue, getDaysUntilDue } from '../lib/taskUtils';
 
 const DashboardPage = () => {
-    const { 
+  const { 
     tasks, 
+    pagination,
+    taskStats,
     getTasks,
-    // isTasksLoading - used for loading states in UI
+    getTaskStats,
+    isTasksLoading
   } = useTaskStore();
   const { authUser, refreshUser } = useAuthStore();
   const { theme } = useThemeStore();
@@ -33,6 +36,7 @@ const DashboardPage = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [greeting, setGreeting] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Scroll to task management section
   const scrollToTaskManagement = () => {
@@ -45,20 +49,36 @@ const DashboardPage = () => {
     }
   };
 
-  // Handle filter changes with scroll
+  // Handle filter changes with scroll - always start from page 1
   const handleFilterChange = (value) => {
     setActiveFilter(value);
+    setCurrentPage(1); // Always reset to page 1 when filter changes
+    getTasks(1, 10, value); // Fetch first page of filtered results
+    scrollToTaskManagement();
+  };
+
+  // Handle page changes within current filter
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    getTasks(page, 10, activeFilter); // Use current filter
     scrollToTaskManagement();
   };
 
   useEffect(() => {
-    getTasks();
+    // Don't auto-fetch on currentPage change, let handlePageChange handle it
+    // This prevents duplicate calls
+  }, [currentPage]);
+
+  // Initial load effect
+  useEffect(() => {
+    getTasks(1, 10, 'all'); // Start with all tasks, page 1
+    getTaskStats(); // Fetch stats on initial load
     setGreeting(getTimeBasedGreeting());
     
     if (authUser) {
       refreshUser();
     }
-  }, [getTasks, refreshUser, authUser]);
+  }, []); // Only run on mount
 
   const getTimeBasedGreeting = () => {
     const hour = new Date().getHours();
@@ -67,17 +87,17 @@ const DashboardPage = () => {
     return 'Good evening';
   };
 
-  // Calculate statistics using shared utility
+  // Calculate statistics - use dedicated stats endpoint for accurate totals
   const stats = {
-    total: tasks.length,
-    completed: tasks.filter(task => task.status === 'completed').length,
-    pending: tasks.filter(task => task.status === 'pending').length,
-    overdue: tasks.filter(task => isTaskOverdue(task)).length
+    total: taskStats?.totalTasks || 0,
+    completed: taskStats?.completedTasks || 0,
+    pending: taskStats?.pendingTasks || 0,
+    overdue: taskStats?.overdueTasks || 0
   };
 
-  const completionRate = stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
+  const completionRate = taskStats?.completionRate || 0;
 
-  // Get upcoming tasks (next 7 days)
+  // Get upcoming tasks (next 7 days) from current page
   const upcomingTasks = tasks
     .filter(task => task.status === 'pending')
     .filter(task => {
@@ -97,6 +117,13 @@ const DashboardPage = () => {
   const handleTaskFormClose = () => {
     setShowTaskForm(false);
     setEditingTask(null);
+    // Refresh current page and stats after form close
+    getTasks(currentPage, 10, activeFilter);
+    getTaskStats();
+  };
+
+  const handleAddTask = () => {
+    setShowTaskForm(true);
   };
 
   return (
@@ -216,7 +243,7 @@ const DashboardPage = () => {
               </div>
               <div>
                 <h3 className={`font-semibold mb-1 ${theme === 'light' ? 'text-white/90' : 'text-base-content/80'}`}>Completed</h3>
-                <p className={`text-sm ${theme === 'light' ? 'text-white/70' : 'text-base-content/60'}`}>100% completion rate</p>
+                <p className={`text-sm ${theme === 'light' ? 'text-white/70' : 'text-base-content/60'}`}>Successfully finished</p>
               </div>
             </div>
           </div>
@@ -334,7 +361,7 @@ const DashboardPage = () => {
               
               <div className="space-y-3">
                 <button 
-                  onClick={() => setShowTaskForm(true)}
+                  onClick={handleAddTask}
                   className="btn btn-primary w-full gap-2"
                 >
                   <Plus className="w-4 h-4" />
@@ -417,10 +444,13 @@ const DashboardPage = () => {
         <div id="task-management">
           <TaskList 
             tasks={tasks}
+            pagination={pagination}
             activeFilter={activeFilter}
             onFilterChange={setActiveFilter}
             onTaskEdit={handleTaskEdit}
-            onAddTask={() => setShowTaskForm(true)}
+            onAddTask={handleAddTask}
+            onPageChange={handlePageChange}
+            isLoading={isTasksLoading}
           />
         </div>
       </div>

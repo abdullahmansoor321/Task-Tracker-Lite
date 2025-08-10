@@ -3,7 +3,6 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useThemeStore } from "../store/useThemeStore";
 import { Eye, EyeOff, Loader2, Lock, Mail, CheckSquare, User, ArrowLeft, Check, Shield, Zap, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import AnimatedBackground from "../components/AnimatedBackground";
 import toast from "react-hot-toast";
 
 const SignUpPage = () => {

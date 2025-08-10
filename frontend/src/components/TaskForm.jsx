@@ -101,9 +101,14 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
         await createTask(formData);
       }
       
-      onClose && onClose();
+      // Close the form after successful operation
+      // The parent component (DashboardPage) will handle refreshing the task list
+      if (onClose) {
+        onClose();
+      }
     } catch (error) {
       console.error('Task operation failed:', error);
+      // Error handling is done in the store with toast messages
     }
   };
 
@@ -129,6 +134,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
           <button
             onClick={onClose}
             className="btn btn-ghost btn-sm btn-circle flex-shrink-0 ml-2"
+            disabled={isCreatingTask || isUpdatingTask}
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
@@ -149,6 +155,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
             placeholder="Enter task title..."
             className={`input input-bordered input-sm sm:input-md w-full ${errors.title ? 'input-error' : ''}`}
             maxLength="100"
+            disabled={isCreatingTask || isUpdatingTask}
           />
           {errors.title && (
             <label className="label">
@@ -181,6 +188,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
               placeholder="Describe your task in detail... What needs to be done? Any specific requirements or notes?"
               className="textarea textarea-bordered textarea-sm sm:textarea-md min-h-[100px] sm:min-h-[120px] resize-y leading-relaxed text-sm sm:text-base p-3 sm:p-4 focus:textarea-primary"
               maxLength="500"
+              disabled={isCreatingTask || isUpdatingTask}
             />
             <div className="absolute bottom-2 right-2 text-xs text-base-content/40 bg-base-100 px-2 py-1 rounded">
               {formData.description.length}/500
@@ -208,6 +216,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
               value={formData.priority}
               onChange={handleInputChange}
               className="select select-bordered select-sm sm:select-md w-full"
+              disabled={isCreatingTask || isUpdatingTask}
             >
               {priorities.map((priority) => (
                 <option key={priority.value} value={priority.value}>
@@ -230,6 +239,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
               value={formData.category}
               onChange={handleInputChange}
               className="select select-bordered select-sm sm:select-md w-full"
+              disabled={isCreatingTask || isUpdatingTask}
             >
               <option value="">Select category...</option>
               {categories.map((category) => (
@@ -256,6 +266,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
             onChange={handleInputChange}
             min={new Date().toISOString().split('T')[0]}
             className={`input input-bordered input-sm sm:input-md w-full ${errors.dueDate ? 'input-error' : ''}`}
+            disabled={isCreatingTask || isUpdatingTask}
           />
           {errors.dueDate && (
             <label className="label">
@@ -272,6 +283,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, dueDate: new Date().toISOString().split('T')[0] }))}
                 className="link link-primary ml-1"
+                disabled={isCreatingTask || isUpdatingTask}
               >
                 Today
               </button>
@@ -280,6 +292,7 @@ const TaskForm = ({ onClose, taskToEdit = null }) => {
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, dueDate: getTomorrowDate() }))}
                 className="link link-primary"
+                disabled={isCreatingTask || isUpdatingTask}
               >
                 Tomorrow
               </button>
