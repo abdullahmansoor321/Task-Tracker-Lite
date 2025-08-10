@@ -15,8 +15,11 @@ A modern, full-stack task management application built with the MERN stack, feat
 ## ✨ Features
 
 ### 🎯 Core Functionality
+### 🎯 Core Functionality
 - **Task Management**: Create, edit, delete, and organize tasks
-- **Smart Filtering**: Filter tasks by status, priority, and due dates
+- **Smart Filtering**: Filter tasks by status, priority, category, and due dates
+- **Pagination**: View 10 tasks per page with previous/next navigation
+- **Overdue & Upcoming Tasks**: Highlight overdue and upcoming tasks in dashboard
 - **Real-time Updates**: Instant synchronization across devices
 - **Progress Tracking**: Visual progress indicators and completion rates
 
@@ -30,11 +33,11 @@ A modern, full-stack task management application built with the MERN stack, feat
 - **Secure Authentication**: JWT-based login system
 - **User Profiles**: Customizable user profiles with avatar uploads
 - **Protected Routes**: Secure access to user-specific data
-
 ### 📊 Analytics & Insights
 - **Productivity Metrics**: Track completion rates and productivity scores
+- **Task Statistics**: View total, completed, pending, and overdue tasks
 - **Visual Statistics**: Beautiful charts and progress indicators
-- **Achievement System**: Gamified productivity tracking
+- **Intuitive Dashboard**: Comprehensive productivity hub with analytics
 
 ## 🛠️ Tech Stack
 
@@ -65,6 +68,8 @@ A modern, full-stack task management application built with the MERN stack, feat
 #### Tasks
 - `POST /api/tasks` - Create new task
 - `GET /api/tasks` - Get user's tasks (with pagination)
+- `GET /api/tasks/overdue` - Get user's overdue tasks
+- `GET /api/tasks/stats` - Get task statistics (total, completed, overdue, etc.)
 - `PUT /api/tasks/:id` - Update task
 - `DELETE /api/tasks/:id` - Delete task
 
